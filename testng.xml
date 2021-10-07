@@ -1,11 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="All Test Suite">
+    <test name="Initialize">
+        <classes>
+            <class name="andrasborsos.Initialize">
+                <methods>
+                    <include name="initialize"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
     <test name="Namesday">
         <classes>
             <class name="andrasborsos.NamesdaysTest">
                 <methods>
-                    <include name="TodaysNamesdays"/>
+                    <include name="todaysNamesdays"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    <test name="ReadResults">
+        <classes>
+            <class name="andrasborsos.ReadResultsTest">
+                <methods>
+                    <include name="readResults"/>
                 </methods>
             </class>
         </classes>
