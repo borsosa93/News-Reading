@@ -1,16 +1,16 @@
 package andrasborsos.PageObjects;
 
-import andrasborsos.resources.Base;
+import andrasborsos.resources.ChooseInitializeDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
-public class NamesdaysPage extends Base {
+public class NamesdaysPage extends ChooseInitializeDriver {
 
-    public NamesdaysPage() {
-        this.driver = initilize();
+    public NamesdaysPage(WebDriver driver) {
+        this.driver = driver;
         driver.get("https://mainevnap.hu/");
     }
     public WebDriver driver;

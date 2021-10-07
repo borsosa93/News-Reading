@@ -1,5 +1,6 @@
 package andrasborsos.resources;
 
+import com.sun.tools.javac.comp.Todo;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 
-public class Base {
+public class ChooseInitializeDriver {
 
     // to be changed
     //String browserName=System.getProperty("browser");
@@ -21,11 +22,11 @@ public class Base {
     public String projectRoot=System.getProperty("user.dir");
     private static ArrayList<String> toBeRead=new ArrayList<>();
 
-    private static void initializeToBeRead(){
-        toBeRead.add("A mai dátum "+formatted+"");
+    protected static void initializeToBeRead(){
+        toBeRead.add("A mai dátum "+formatted+".");
     }
 
-    public WebDriver initilize(){
+    public WebDriver initializeDriver(){
         WebDriver driver=null;
         if(browserName.equalsIgnoreCase("chrome")){
             System.setProperty("webdriver.chrome.driver",projectRoot+"\\src\\main\\java\\andrasborsos\\resources\\chromedriver.exe");
@@ -35,7 +36,6 @@ public class Base {
             driver=new FirefoxDriver();
         }
 
-        initializeToBeRead();
         return driver;
     }
 
