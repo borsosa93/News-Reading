@@ -1,6 +1,5 @@
 package andrasborsos.resources;
 
-import com.sun.tools.javac.comp.Todo;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
