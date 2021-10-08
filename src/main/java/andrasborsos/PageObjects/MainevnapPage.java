@@ -7,9 +7,9 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
-public class NamesdaysPage extends ChooseInitializeDriver {
+public class MainevnapPage extends ChooseInitializeDriver {
 
-    public NamesdaysPage(WebDriver driver) {
+    public MainevnapPage(WebDriver driver) {
         this.driver = driver;
         driver.get("https://mainevnap.hu/");
     }
