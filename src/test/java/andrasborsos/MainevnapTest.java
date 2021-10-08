@@ -1,6 +1,6 @@
 package andrasborsos;
 
-import andrasborsos.PageObjects.NamesdaysPage;
+import andrasborsos.PageObjects.MainevnapPage;
 import andrasborsos.resources.ChooseInitializeDriver;
 import andrasborsos.resources.StringParser;
 import org.openqa.selenium.WebDriver;
@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-public class NamesdaysTest extends ChooseInitializeDriver implements StringParser {
+public class MainevnapTest extends ChooseInitializeDriver implements StringParser {
 
    private String namesdays="Ma ";
    private WebDriver driver;
@@ -24,7 +24,7 @@ public class NamesdaysTest extends ChooseInitializeDriver implements StringParse
 
     @Test
     public void todaysNamesdays(){
-        NamesdaysPage namesdaysPage=new NamesdaysPage(driver);
+        MainevnapPage namesdaysPage=new MainevnapPage(driver);
         List<WebElement> namesdaysList=namesdaysPage.getNamesdays();
         Iterator<WebElement> iterator= namesdaysList.listIterator();
 

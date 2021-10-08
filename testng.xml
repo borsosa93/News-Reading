@@ -12,7 +12,7 @@
     </test>
     <test name="Namesday">
         <classes>
-            <class name="andrasborsos.NamesdaysTest">
+            <class name="andrasborsos.MainevnapTest">
                 <methods>
                     <include name="todaysNamesdays"/>
                 </methods>
