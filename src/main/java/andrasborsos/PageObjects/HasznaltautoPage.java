@@ -42,10 +42,10 @@ public class HasznaltautoPage extends ChooseInitializeDriver {
     }
 
     public WebElement getChosenMake(String make){
-        return driver.findElement(makeDropDownLocator).findElement(By.xpath("//option[contains(text(),'SUZUKI')]"));
+        return driver.findElement(makeDropDownLocator).findElement(By.xpath("//option[contains(text(),'"+make+"')]"));
     }
     public WebElement getChosenModel(String model){
-        return driver.findElement(modelDropDownLocator).findElement(By.xpath("//option[contains(text(),'XF')]"));
+        return driver.findElement(modelDropDownLocator).findElement(By.xpath("//option[contains(text(),'"+model+"')]"));
     }
 
     public WebElement getSearchBTN(){
