@@ -10,11 +10,20 @@
             </class>
         </classes>
     </test>
-    <test name="Namesday">
+    <test name="Mai névnap">
         <classes>
             <class name="andrasborsos.MainevnapTest">
                 <methods>
                     <include name="todaysNamesdays"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    <test name="Használtautó">
+        <classes>
+            <class name="andrasborsos.HasznaltautoTest">
+                <methods>
+                    <include name="motorbikesPrices"/>
                 </methods>
             </class>
         </classes>

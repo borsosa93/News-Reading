@@ -4,9 +4,10 @@ import andrasborsos.resources.ChooseInitializeDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.ArrayList;
-import java.util.Vector;
 
 public class HasznaltautoSearchResultsPage extends ChooseInitializeDriver {
 
@@ -16,22 +17,26 @@ public class HasznaltautoSearchResultsPage extends ChooseInitializeDriver {
 
     WebDriver driver;
 
-    //Paid and normal ads'parent node
     By resultsLocator =By.cssSelector("div[class*='talalati-sor']");
     By pricesLocator =By.cssSelector("div[class='vetelar']");
     By nextResultsPageBTNLocator= By.cssSelector(".lapozoNyilJobb.haicon.haicon-uj-jnyil-kicsi");
 
     public ArrayList<WebElement> getPrices(){
+        WebDriverWait webDriverWait=new WebDriverWait(driver,5);
+        webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(pricesLocator));
+
         ArrayList<WebElement> results=(ArrayList<WebElement>)driver.findElements(resultsLocator);
         ArrayList<WebElement> prices=new ArrayList<>();
 
-        for(int i = 0; i< results.size(); i++){
-            prices.add(results.get(i).findElement(pricesLocator));
+        for (WebElement result : results) {
+            prices.add(result.findElement(pricesLocator));
         }
         return prices;
     }
 
     public WebElement getnextResultsPageBTN(){
+        if(!driver.findElement(nextResultsPageBTNLocator).equals(null))
         return driver.findElement(nextResultsPageBTNLocator);
+        else return null;
     }
 }

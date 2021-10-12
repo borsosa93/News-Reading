@@ -5,6 +5,7 @@ import andrasborsos.resources.ChooseInitializeDriver;
 import andrasborsos.resources.StringParser;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -24,8 +25,8 @@ public class MainevnapTest extends ChooseInitializeDriver implements StringParse
 
     @Test
     public void todaysNamesdays(){
-        MainevnapPage namesdaysPage=new MainevnapPage(driver);
-        List<WebElement> namesdaysList=namesdaysPage.getNamesdays();
+        MainevnapPage mainevnapPage=new MainevnapPage(driver);
+        List<WebElement> namesdaysList=mainevnapPage.getNamesdays();
         Iterator<WebElement> iterator= namesdaysList.listIterator();
 
         while (iterator.hasNext()){
@@ -36,14 +37,14 @@ public class MainevnapTest extends ChooseInitializeDriver implements StringParse
             else{
                 namesdays+=textToAdd+" ";
             }
-
         }
+    }
 
+    @AfterTest
+    public void postproc(){
+        driver.close();
         editStringToRead();
-        namesdaysPage.addToBeRead(namesdays);
-
-        System.out.println(namesdaysPage.getToBeRead());
-        namesdaysPage.driver.close();
+        addToBeRead(namesdays);
     }
 
     @Override

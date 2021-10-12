@@ -5,6 +5,7 @@ import andrasborsos.resources.ChooseInitializeDriver;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,11 +17,12 @@ public class ReadResultsTest extends ChooseInitializeDriver {
     @BeforeTest
     public void initialize() throws IOException {
         driver=initializeDriver();
+        driver.get("https://translate.google.com/");
     }
 
-    @AfterSuite
+    @Test
     public void readResults(){
-        GoogleTranslatePage googleTranslatePage=new GoogleTranslatePage();
+        GoogleTranslatePage googleTranslatePage=new GoogleTranslatePage(driver);
         googleTranslatePage.getAcceptCookiesButton().click();
         ArrayList<String> textToBeRead=googleTranslatePage.getToBeRead();
 

@@ -9,9 +9,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class GoogleTranslatePage extends ChooseInitializeDriver {
 
-    public GoogleTranslatePage() {
-        this.driver = initializeDriver();
-        driver.get("https://translate.google.com/");
+    public GoogleTranslatePage(WebDriver driver) {
+        this.driver = driver;
     }
 
     WebDriver driver;
