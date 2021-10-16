@@ -29,6 +29,11 @@
             </class>
         </classes>
     </test>
+    <test name="Autós hírek" >
+        <classes>
+            <class name="andrasborsos.TotalcarTest"/>
+        </classes>
+    </test>
     <test name="Használtautó">
         <classes>
             <class name="andrasborsos.HasznaltautoTest">

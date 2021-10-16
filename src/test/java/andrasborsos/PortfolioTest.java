@@ -24,7 +24,6 @@ public class PortfolioTest extends ChooseInitializeDriver {
 
     @Test
     public void exchangeRates(){
-        ratesEURUSD.add("Gazdasági hírek a portfólió.huról");
         String rate="Az euró árfolyama ";
         PortfolioPage portfolioPage=new PortfolioPage(driver);
         driver.switchTo().frame(1);
@@ -40,6 +39,7 @@ public class PortfolioTest extends ChooseInitializeDriver {
 
     @Test(dependsOnMethods = {"exchangeRates"})
     public void economyArticles(){
+        articlesTitles.add("Gazdasági hírek a portfólió pont huról.");
         PortfolioPage portfolioPage=new PortfolioPage(driver);
         ArrayList<WebElement> articles=portfolioPage.getCoverPageArticles();
         for (WebElement article : articles) {
