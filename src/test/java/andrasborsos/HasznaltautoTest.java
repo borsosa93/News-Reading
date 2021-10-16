@@ -4,7 +4,6 @@ package andrasborsos;
 import andrasborsos.PageObjects.HasznaltautoPage;
 import andrasborsos.PageObjects.HasznaltautoSearchResultsPage;
 import andrasborsos.resources.ChooseInitializeDriver;
-import andrasborsos.resources.StringParser;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.AfterTest;
@@ -13,9 +12,9 @@ import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 
-public class HasznaltautoTest extends ChooseInitializeDriver implements StringParser {
+public class HasznaltautoTest extends ChooseInitializeDriver {
 
-   private String motorbikesAVGPrice="Jelenleg ";
+   private ArrayList<String> motorbikesAVGPrice=new ArrayList<>();
    private String makeToFind="SUZUKI";
    private String modelToFind="XF 650";
    private WebDriver driver;
@@ -40,22 +39,14 @@ public class HasznaltautoTest extends ChooseInitializeDriver implements StringPa
         hasznaltautoPage.getSearchBTN().click();
 
         HasznaltautoSearchResultsPage hasznaltautoSearchResultsPage=new HasznaltautoSearchResultsPage(driver);
-        motorbikesAVGPrice+=hasznaltautoSearchResultsPage.getPrices().size();
-        motorbikesAVGPrice+=(" darab eladó "+makeToFind+" "+modelToFind+" található a használtautó.hun. Átlagos áruk ");
-        motorbikesAVGPrice+=parsePrices(hasznaltautoSearchResultsPage.getPrices());
-
+        motorbikesAVGPrice.add("Jelenleg "+hasznaltautoSearchResultsPage.getPrices().size()+" darab eladó "+makeToFind+" "+modelToFind+" található a használtautó.hun.");
+        motorbikesAVGPrice.add("Átlagos áruk "+parsePrices(hasznaltautoSearchResultsPage.getPrices())+" Ft");
     }
 
     @AfterTest
     public void postproc(){
         driver.close();
-        editStringToRead();
         addToBeRead(motorbikesAVGPrice);
-    }
-
-    @Override
-    public void editStringToRead() {
-        motorbikesAVGPrice+=" forint.";
     }
 
     int parsePrices(ArrayList<WebElement> pricesList){

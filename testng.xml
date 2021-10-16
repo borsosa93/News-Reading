@@ -19,6 +19,16 @@
             </class>
         </classes>
     </test>
+    <test name="Gazdasági hírek" preserve-order="true">
+        <classes>
+            <class name="andrasborsos.PortfolioTest">
+                <methods>
+                    <include name="exchangeRates"/>
+                    <include name="economyArticles"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
     <test name="Használtautó">
         <classes>
             <class name="andrasborsos.HasznaltautoTest">

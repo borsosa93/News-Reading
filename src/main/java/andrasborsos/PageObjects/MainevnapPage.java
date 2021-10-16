@@ -15,10 +15,10 @@ public class MainevnapPage extends ChooseInitializeDriver {
     }
     public WebDriver driver;
 
-    By namesdaysTitle=new By.ByCssSelector("tr:nth-child(2) > td:nth-child(2)");
-    By namesday=new By.ByCssSelector("span[class='piroskiem']");
+    By namesdaysTitleLocator=new By.ByCssSelector("tr:nth-child(2) > td:nth-child(2)");
+    By namesdayLocator=new By.ByCssSelector("span[class='piroskiem']");
 
     public List<WebElement> getNamesdays(){
-        return driver.findElement(namesdaysTitle).findElements(namesday);
+        return driver.findElement(namesdaysTitleLocator).findElements(namesdayLocator);
     }
 }
