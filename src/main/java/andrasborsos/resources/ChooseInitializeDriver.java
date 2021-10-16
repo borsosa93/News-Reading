@@ -43,8 +43,10 @@ public class ChooseInitializeDriver {
     }
 
     public void addToBeRead(String toBeAdded) {
-
         toBeRead.add(toBeAdded);
+    }
+    public void addToBeRead(ArrayList<String> toBeAdded) {
+        toBeRead.addAll(toBeAdded);
     }
 
 }

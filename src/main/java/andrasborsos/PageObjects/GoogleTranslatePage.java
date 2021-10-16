@@ -15,18 +15,18 @@ public class GoogleTranslatePage extends ChooseInitializeDriver {
 
     WebDriver driver;
 
-    By acceptCookiesBTN=new By.ByCssSelector("button[jsname='higCR']");
-    By inputTextBox=new By.ByCssSelector("textarea[class='er8xn']");
+    By acceptCookiesBTNLocator =new By.ByCssSelector("button[jsname='higCR']");
+    By inputTextBoxLocator=new By.ByCssSelector("textarea[class='er8xn']");
     By moreLanguagesBTN=new By.ByCssSelector("button[jsname='RCbdJd']");
-    By readBTN=new By.ByCssSelector("button[jscontroller='xzbRj']");
+    By readBTNLocator =new By.ByCssSelector("button[jscontroller='xzbRj']");
 
     public WebElement getInputTextBox(){
-        return driver.findElement(inputTextBox);
+        return driver.findElement(inputTextBoxLocator);
     }
     public WebElement getReadBTN(){
         WebDriverWait webDriverWait=new WebDriverWait(driver,5);
-        webDriverWait.until(ExpectedConditions.elementToBeClickable(readBTN));
-        return driver.findElement(readBTN);
+        webDriverWait.until(ExpectedConditions.elementToBeClickable(readBTNLocator));
+        return driver.findElement(readBTNLocator);
     }
-    public WebElement getAcceptCookiesButton(){ return driver.findElement(acceptCookiesBTN);}
+    public WebElement getAcceptCookiesButton(){ return driver.findElement(acceptCookiesBTNLocator);}
 }
