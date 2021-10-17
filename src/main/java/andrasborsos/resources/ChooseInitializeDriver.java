@@ -49,4 +49,7 @@ public class ChooseInitializeDriver {
         toBeRead.addAll(toBeAdded);
     }
 
+    public static String getFormatted() {
+        return formatted;
+    }
 }
