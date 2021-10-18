@@ -1,15 +1,14 @@
 package andrasborsos.PageObjects;
 
 import andrasborsos.resources.ChooseInitializeDriver;
-import io.github.sukgu.Shadow;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class FlixbusHomePage extends ChooseInitializeDriver {
 
@@ -21,9 +20,11 @@ public class FlixbusHomePage extends ChooseInitializeDriver {
     private int firstActiveDayIndexLeft=-1;
     private int departureDayIndex=-1;
     private int arrivalDayIndex=-1;
-    Shadow shadow=new Shadow(driver);
 
-    By acceptCookiesBTNLocator =new By.ByCssSelector("button[data-testid='uc-accept-all-button']");
+    By shadowHostLocator =new By.ByCssSelector("div[id='usercentrics-root']");
+    By shadowHostFirstChildLocator =new By.ByCssSelector("section[data-testid='uc-app-container']");
+    By acceptCookiesBTNLocator=new By.ByCssSelector("button[data-testid='uc-accept-all-button']");
+
     By roundtripRBTNLocator= new By.ByCssSelector("label[for='search-mask-trip-mode-roundtrip-toggle']");
     By departureInputBoxLocator=new By.ByCssSelector("div[data-e2e='departure-city-input-field']>div>div>div>input");
     By arrivalInputBoxLocator=new By.ByCssSelector("div[data-e2e='arrival-city-input-field']>div>div>div>input");
@@ -43,9 +44,15 @@ public class FlixbusHomePage extends ChooseInitializeDriver {
 
     By searchBTNLocator=new By.ByCssSelector("button.smhc-btn--primary");
 
-    /*public WebElement getAcceptCookiesBTN(){
-        return shadow.findElement(acceptCookiesBTNLocator);
-    }*/
+    public WebElement getAcceptCookiesBTN() {
+        WebDriverWait webDriverWait=new WebDriverWait(driver,10);
+        webDriverWait.until(ExpectedConditions.numberOfElementsToBeMoreThan(shadowHostLocator,0));
+        WebElement shadowHost= driver.findElement(shadowHostLocator);
+        JavascriptExecutor jsExecutor=(JavascriptExecutor) driver;
+        WebElement shadowRoot=(WebElement) jsExecutor.executeScript("return arguments[0].shadowRoot",shadowHost);
+        webDriverWait.until(ExpectedConditions.visibilityOf((shadowRoot.findElement(shadowHostFirstChildLocator))));
+        return shadowRoot.findElement(acceptCookiesBTNLocator);
+   }
 
     public WebElement getRoundtripRBTN(){
         WebDriverWait webDriverWait=new WebDriverWait(driver,10);
@@ -65,12 +72,11 @@ public class FlixbusHomePage extends ChooseInitializeDriver {
         WebDriverWait webDriverWait=new WebDriverWait(driver,3);
         webDriverWait.until(ExpectedConditions.numberOfElementsToBeMoreThan(citiesLocator,0));
         ArrayList<WebElement> cities=(ArrayList<WebElement>)driver.findElements(citiesLocator);
-        System.out.println(cities.size());
         ArrayList<WebElement> spanNodes;
-        for (int i=0;i<cities.size();i++) {
-            spanNodes= (ArrayList<WebElement>)cities.get(i).findElements(citiesRestOfNameLocator);
+        for (WebElement city : cities) {
+            spanNodes = (ArrayList<WebElement>) city.findElements(citiesRestOfNameLocator);
             if (!(spanNodes.size() > 0)) {
-                return cities.get(i);
+                return city;
             }
         }
         return null;
@@ -100,7 +106,7 @@ public class FlixbusHomePage extends ChooseInitializeDriver {
                 break;
             }
         }
-        departureDayIndex=firstActiveDayIndexLeft+departureDay;
+        departureDayIndex=firstActiveDayIndexLeft+departureDay-1;
         return allDays.get(departureDayIndex);
     }
 
