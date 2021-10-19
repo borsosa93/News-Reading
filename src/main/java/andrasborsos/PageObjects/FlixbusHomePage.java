@@ -40,6 +40,7 @@ public class FlixbusHomePage extends ChooseInitializeDriver {
 
     By passengersOptionsLocator =new By.ByCssSelector(".smhc-input.hWzho._3XtvC._1sS9N > input");
     By adultsInputLocator =new By.ByCssSelector("div[data-product-type='adult'] > div.OsIw7 > div > div > input");
+    By childrenInputLocator=new By.ByCssSelector("div[data-product-type='children'] > div.OsIw7 > div > div > input");
     By bikesInputLocator=new By.ByCssSelector("div[data-product-type='bike_slot'] > div.OsIw7 > div > div > input");
 
     By searchBTNLocator=new By.ByCssSelector("button.smhc-btn--primary");
@@ -132,6 +133,10 @@ public class FlixbusHomePage extends ChooseInitializeDriver {
 
     public WebElement getAdultsInput(){
         return driver.findElement(adultsInputLocator);
+    }
+
+    public WebElement getChildrenInput(){
+        return driver.findElement(childrenInputLocator);
     }
 
     public WebElement getbikesInput(){
