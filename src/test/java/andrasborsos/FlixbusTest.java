@@ -79,17 +79,32 @@ public class FlixbusTest extends ChooseInitializeDriver {
 
     private void parseSearchResults(ArrayList<ArrayList<WebElement>> resultsOrganized) {
 
-       /* for (int i = 0; i < resultsOrganized.size(); i++) {
+        for (int i = 0; i < resultsOrganized.size(); i++) {
            for(int j=0;j<resultsOrganized.get(0).size();j++){
-               if(resultsOrganized.get(i).get(j).equals(null))
+               if(resultsOrganized.get(i).get(j)==(null))
                    System.out.println("null array element");
-               else if (resultsOrganized.get(i).get(j).getText().equals(null))
+               else if (resultsOrganized.get(i).get(j).getText()==null)
                    System.out.println("null text");
                else
                    System.out.println(resultsOrganized.get(i).get(j).getText());
            }
             System.out.println("\n");
-        }*/
+        }
+
+        resultsOrganized=transpose(resultsOrganized);
+
+        for (int i = 0; i < resultsOrganized.size(); i++) {
+            for(int j=0;j<resultsOrganized.get(0).size();j++){
+                if(resultsOrganized.get(i).get(j)==(null))
+                    System.out.println("null array element");
+                else if (resultsOrganized.get(i).get(j).getText()==null)
+                    System.out.println("null text");
+                else
+                    System.out.println(resultsOrganized.get(i).get(j).getText());
+            }
+            System.out.println("\n");
+        }
+
         ArrayList<WebElement> departureTimes = resultsOrganized.get(0);
         ArrayList<WebElement> prices = resultsOrganized.get(1);
         ArrayList<WebElement> errorMessages= resultsOrganized.get(2);
@@ -97,9 +112,15 @@ public class FlixbusTest extends ChooseInitializeDriver {
         ArrayList<String> departureTimesText=new ArrayList<>();
 
         //If there are departure times at all, then
-        if (!(departureTimes.stream().allMatch(webElement -> webElement.equals(null)))) {
+        if (!(departureTimes.stream().allMatch(webElement -> webElement==null))) {
             //Find the indices of unique departure times
-            departureTimes.stream().map(WebElement::getText).forEach(departureTimesText::add);
+            //departureTimes.stream().map(WebElement::getText).forEach(departureTimesText::add);
+            /*for(WebElement element:departureTimes){
+                if(element.getText()==null){
+                    System.out.println("null text");
+                }
+                else System.out.println(departureTimesText.add(element.getText()));
+            }*/
             ArrayList<String> departureTimesUnique = (ArrayList<String>) departureTimesText.stream().distinct().collect(Collectors.toList());
             ArrayList<Integer> uniqueIndeces = new ArrayList<>();
             for (int i = 0; i < departureTimesUnique.size(); i++) {
@@ -124,5 +145,20 @@ public class FlixbusTest extends ChooseInitializeDriver {
         else {
             ticketsPrices.add("A Flixbusnál nincsenek jegyek az útvonalon a kiválasztott paraméterekkel vagy hiba történt. Az oldalról képernyőfotót készítettem a projekt gyökérmappájába.");
         }
+    }
+
+    private ArrayList<ArrayList<WebElement>> transpose(ArrayList<ArrayList<WebElement>> matrixIn) {
+        ArrayList<ArrayList<WebElement>> transposedMatrix = new ArrayList<ArrayList<WebElement>>();
+        if (!matrixIn.isEmpty()) {
+            int noOfElementsInInnerList = matrixIn.get(0).size();
+            for (int i = 0; i < noOfElementsInInnerList; i++) {
+                ArrayList<WebElement> col = new ArrayList<WebElement>();
+                for (ArrayList<WebElement> row : matrixIn) {
+                    col.add(row.get(i));
+                }
+                transposedMatrix.add(col);
+            }
+        }
+        return transposedMatrix;
     }
 }

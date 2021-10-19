@@ -31,19 +31,9 @@ public class FlixbusSearchResultsPage extends ChooseInitializeDriver {
         ArrayList<WebElement> resultsRowsOnPage=(ArrayList<WebElement>)driver.findElements(resultsLocator);
         for(int i=0;i< resultsRowsOnPage.size();i++){
             ArrayList<WebElement> resultContainer=new ArrayList<>();
-            addResultSubtypeToContainer(0,departureTimeLocator, driver,resultsRowsOnPage,resultContainer);
-            addResultSubtypeToContainer(1,priceLocator, driver,resultsRowsOnPage,resultContainer);
-            addResultSubtypeToContainer(2,reservationErrorMessageLocator, driver,resultsRowsOnPage,resultContainer);
-            System.out.println(resultContainer.size());
-            for(int j=0;j<resultContainer.size();j++){
-                if(resultContainer.get(j).equals(null)){
-                    System.out.println("null object");
-                }
-                else if(resultContainer.get(j).getText().equals(null)){
-                    System.out.println("null text");
-                }
-                else System.out.println(resultContainer.get(j).getText());
-            }
+            addResultSubtypeToContainer(i,departureTimeLocator, driver,resultsRowsOnPage,resultContainer);
+            addResultSubtypeToContainer(i,priceLocator, driver,resultsRowsOnPage,resultContainer);
+            addResultSubtypeToContainer(i,reservationErrorMessageLocator, driver,resultsRowsOnPage,resultContainer);
             resultsOrganized.add(resultContainer);
         }
         return resultsOrganized;
@@ -63,7 +53,7 @@ public class FlixbusSearchResultsPage extends ChooseInitializeDriver {
 
     private ArrayList<WebElement> addResultSubtypeToContainer(int i, By resultSubtypeLocator,WebDriver driver, ArrayList<WebElement> resultsRowsOnPage, ArrayList<WebElement> resultContainer){
         if(resultsRowsOnPage.get(i).findElements(resultSubtypeLocator).size()>0){
-            resultContainer.add(driver.findElement(resultSubtypeLocator));
+            resultContainer.add(resultsRowsOnPage.get(i).findElement(resultSubtypeLocator));
         }
         else{
             resultContainer.add(null);
