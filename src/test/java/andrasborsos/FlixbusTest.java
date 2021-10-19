@@ -68,6 +68,7 @@ public class FlixbusTest extends ChooseInitializeDriver {
         ticketsPrices.add("Jegyek a Flixbus "+departure+" - "+arrival+ " járatára "+ getTodaysDate().plusMonths(2)+"-án "+passengersAdults+ " felnőtt és "+passengersChildren+" gyerek részére "+passengersBikes+" kerékpárral:");
         //parseSearchResults(flixbusSearchResultsPage.getDepartureTimes(), flixbusSearchResultsPage.getPrices(), flixbusSearchResultsPage.getreservationErrorMessages());
         parseSearchResults(flixbusSearchResultsPage.getResults());
+        System.out.println(ticketsPrices);
     }
 
     private int departureDay() {
@@ -78,6 +79,17 @@ public class FlixbusTest extends ChooseInitializeDriver {
 
     private void parseSearchResults(ArrayList<ArrayList<WebElement>> resultsOrganized) {
 
+       /* for (int i = 0; i < resultsOrganized.size(); i++) {
+           for(int j=0;j<resultsOrganized.get(0).size();j++){
+               if(resultsOrganized.get(i).get(j).equals(null))
+                   System.out.println("null array element");
+               else if (resultsOrganized.get(i).get(j).getText().equals(null))
+                   System.out.println("null text");
+               else
+                   System.out.println(resultsOrganized.get(i).get(j).getText());
+           }
+            System.out.println("\n");
+        }*/
         ArrayList<WebElement> departureTimes = resultsOrganized.get(0);
         ArrayList<WebElement> prices = resultsOrganized.get(1);
         ArrayList<WebElement> errorMessages= resultsOrganized.get(2);
@@ -85,7 +97,7 @@ public class FlixbusTest extends ChooseInitializeDriver {
         ArrayList<String> departureTimesText=new ArrayList<>();
 
         //If there are departure times at all, then
-        if (!departureTimes.stream().allMatch(webElement -> webElement.equals(null))) {
+        if (!(departureTimes.stream().allMatch(webElement -> webElement.equals(null)))) {
             //Find the indices of unique departure times
             departureTimes.stream().map(WebElement::getText).forEach(departureTimesText::add);
             ArrayList<String> departureTimesUnique = (ArrayList<String>) departureTimesText.stream().distinct().collect(Collectors.toList());
@@ -93,6 +105,7 @@ public class FlixbusTest extends ChooseInitializeDriver {
             for (int i = 0; i < departureTimesUnique.size(); i++) {
                 uniqueIndeces.add(departureTimesText.indexOf(departureTimesUnique.get(i)));
             }
+            System.out.println(uniqueIndeces);
             //If the price belonging to the result defined by the time is not null, add them to be read
             String ticketOption=null;
             for (Integer uniqueIndex : uniqueIndeces) {
@@ -111,45 +124,5 @@ public class FlixbusTest extends ChooseInitializeDriver {
         else {
             ticketsPrices.add("A Flixbusnál nincsenek jegyek az útvonalon a kiválasztott paraméterekkel vagy hiba történt. Az oldalról képernyőfotót készítettem a projekt gyökérmappájába.");
         }
-    }
-
-
-    private void parseSearchResults(ArrayList<WebElement> departureTimesWeb, ArrayList<WebElement> pricesWeb, ArrayList<WebElement> errorMessagesWeb) {
-
-        ArrayList<String> departureTimesText = new ArrayList<>();
-        //ArrayList<String> pricesTextUnique = new ArrayList<>();
-        ArrayList<String> errorMessagesTextUnique = new ArrayList<>();
-
-        if ((departureTimesWeb.size() > 0) && (pricesWeb.size()==departureTimesWeb.size())) {
-            //Finding the indices of unique departure times
-            departureTimesWeb.stream().map(WebElement::getText).forEach(departureTimesText::add);
-            ArrayList<String> departureTimesUnique = (ArrayList<String>) departureTimesText.stream().distinct().collect(Collectors.toList());
-            ArrayList<Integer> uniqueIndeces = new ArrayList<>();
-            for (int i = 0; i < departureTimesUnique.size(); i++) {
-                uniqueIndeces.add(departureTimesText.indexOf(departureTimesUnique.get(i)));
-            }
-            //Adding the unique elements to the arraylist to be read
-            String ticketOption;
-            for (Integer uniqueIndex : uniqueIndeces) {
-                ticketOption = departureTimesText.get(uniqueIndex) + " időpontban ";
-                ticketOption += pricesWeb.get(uniqueIndex).getText() + " áron";
-                ticketsPrices.add(ticketOption);
-            }
-            System.out.println(ticketsPrices);
-            }
-
-        if (!(pricesWeb.size() > 0)){
-            ticketsPrices.add("A Flixbusnál nincsenek jegyek az útvonalon a kiválasztott paraméterekkel.");
-        }
-
-        if (errorMessagesWeb.size() > 0) {
-            ticketsPrices.add("A következő hiba a találatokban:");
-            for (int i = 0; i < errorMessagesWeb.size(); i++) {
-                ticketsPrices.add(errorMessagesWeb.get(i).getText());
-            }
-            ticketsPrices.add("A hibáról képernyőfotót készítettem a projekt gyökérmappájába.");
-            System.out.println(ticketsPrices);
-        }
-
     }
 }

@@ -27,14 +27,23 @@ public class FlixbusSearchResultsPage extends ChooseInitializeDriver {
         webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(departureTimeLocator));
 
         ArrayList<ArrayList<WebElement>> resultsOrganized=new ArrayList<>();
-        ArrayList<WebElement> resultContainer=new ArrayList<>();
 
         ArrayList<WebElement> resultsRowsOnPage=(ArrayList<WebElement>)driver.findElements(resultsLocator);
         for(int i=0;i< resultsRowsOnPage.size();i++){
-            resultContainer=null;
-            addResultSubtypeToContainer(i,departureTimeLocator, driver,resultsRowsOnPage,resultContainer);
-            addResultSubtypeToContainer(i,priceLocator, driver,resultsRowsOnPage,resultContainer);
-            addResultSubtypeToContainer(i,departureTimeLocator, driver,resultsRowsOnPage,resultContainer);
+            ArrayList<WebElement> resultContainer=new ArrayList<>();
+            addResultSubtypeToContainer(0,departureTimeLocator, driver,resultsRowsOnPage,resultContainer);
+            addResultSubtypeToContainer(1,priceLocator, driver,resultsRowsOnPage,resultContainer);
+            addResultSubtypeToContainer(2,reservationErrorMessageLocator, driver,resultsRowsOnPage,resultContainer);
+            System.out.println(resultContainer.size());
+            for(int j=0;j<resultContainer.size();j++){
+                if(resultContainer.get(j).equals(null)){
+                    System.out.println("null object");
+                }
+                else if(resultContainer.get(j).getText().equals(null)){
+                    System.out.println("null text");
+                }
+                else System.out.println(resultContainer.get(j).getText());
+            }
             resultsOrganized.add(resultContainer);
         }
         return resultsOrganized;
