@@ -6,7 +6,6 @@ import andrasborsos.resources.ChooseInitializeDriver;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -17,9 +16,9 @@ import java.util.stream.Collectors;
 public class FlixbusTest extends ChooseInitializeDriver {
 
     WebDriver driver;
-    ArrayList<String> ticketsPrices=new ArrayList<>();
-    private String departure="Krakkó";
-    private String arrival="Budapest";
+    ArrayList<String> ticketsPrices = new ArrayList<>();
+    private String departure = "Krakkó";
+    private String arrival = "Budapest";
 
     @BeforeTest
     public void initialize() {
@@ -29,7 +28,7 @@ public class FlixbusTest extends ChooseInitializeDriver {
 
     @Test
     public void busTicketPrices() {
-        FlixbusHomePage flixbusHomePage=new FlixbusHomePage(driver);
+        FlixbusHomePage flixbusHomePage = new FlixbusHomePage(driver);
         flixbusHomePage.getAcceptCookiesBTN().click();
         flixbusHomePage.getRoundtripRBTN().click();
 
@@ -60,24 +59,29 @@ public class FlixbusTest extends ChooseInitializeDriver {
 
         flixbusHomePage.getsearchBTN().click();
 
-        FlixbusSearchResultsPage flixbusSearchResultsPage=new FlixbusSearchResultsPage(driver);
+        FlixbusSearchResultsPage flixbusSearchResultsPage = new FlixbusSearchResultsPage(driver);
         parseSearchResults(flixbusSearchResultsPage.getDepartureTimes(), flixbusSearchResultsPage.getPrices(), flixbusSearchResultsPage.getreservationErrorMessages());
 
     }
 
-    private int departureDay(){
-        int todayNumber=Integer.parseInt(getFormatted().split("-")[2]);
-        if(todayNumber>28){
-            todayNumber=28;
+    private int departureDay() {
+        int todayNumber = Integer.parseInt(getFormatted().split("-")[2]);
+        if (todayNumber > 28) {
+            todayNumber = 28;
         }
         return todayNumber;
     }
-    private void parseSearchResults(ArrayList<WebElement> departureTimes, ArrayList<WebElement> prices,ArrayList<WebElement> errorMessages){
-        ArrayList<String> departureTimesUnique=new ArrayList<>();
-        ArrayList<String> pricesText=new ArrayList<>();
-        ArrayList<String> errorMessagesText=new ArrayList<>();
 
-        if(errorMessages.size()>0){
+    private void parseSearchResults(ArrayList<WebElement> departureTimes, ArrayList<WebElement> prices, ArrayList<WebElement> errorMessages) {
+        //ArrayList<String> departureTimesText=(ArrayList<String>)departureTimes.stream().forEach(webElement -> webElement.getText());
+        //ArrayList<String> departureTimesUnique= new ArrayList<String>();
+        //departureTimes.stream().map(WebElement::getText).forEach(departureTimesUnique::add);
+        //System.out.println(departureTimesUnique);
+        ArrayList<String> departureTimesText = new ArrayList<>();
+        ArrayList<String> pricesText = new ArrayList<>();
+        ArrayList<String> errorMessagesText = new ArrayList<>();
+
+        if (errorMessages.size() > 0) {
             ticketsPrices.add("A következő hiba a találatokban:");
             for (int i = 0; i < errorMessages.size(); i++) {
                 ticketsPrices.add(errorMessages.get(i).getText());
@@ -87,25 +91,39 @@ public class FlixbusTest extends ChooseInitializeDriver {
             return;
         }
 
-        if(departureTimes.size()>0){
-            for (int i = 0; i < departureTimes.size(); i++) {
-                (departureTimes.get(i).getText());
-                if(prices.size()>0){
-                    pricesText.add(prices.get(i).getText());
-                }
-                if(errorMessages.size()>0){
-                    errorMessagesText.add(errorMessages.get(i).getText());
-                }
+        if (departureTimes.size() > 0) {
+
+            departureTimes.stream().map(WebElement::getText).forEach(departureTimesText::add);
+            ArrayList<String> departureTimesUnique = (ArrayList<String>) departureTimesText.stream().distinct().collect(Collectors.toList());
+            ArrayList<Integer> uniqueIndeces = new ArrayList<>();
+            for (int i = 0; i < departureTimesUnique.size(); i++) {
+                    uniqueIndeces.add(departureTimesText.indexOf(departureTimesUnique.get(i)));
+/*
+                ArrayList<String> departureTimesUnique = new ArrayList<>();
+                ArrayList<Integer> uniqueIndeces = new ArrayList<>();
+                boolean uniqueFlag = true;
+                for (int i = 0; i < departureTimes.size(); i++) {
+
+                    if (prices.size() > 0) {
+                        pricesText.add(prices.get(i).getText());
+                    }
+                    if (errorMessages.size() > 0) {
+                        errorMessagesText.add(errorMessages.get(i).getText());
+                    }
+                }*/
             }
-        }
+            System.out.println(uniqueIndeces);
+            }/*
         else{
-            ticketsPrices.add("A Flixbusnál nincsenek jegyek "+departure+" és "+arrival+" között a kiválasztott napokon.");
+            ticketsPrices.add("A Flixbusnál nincsenek jegyek a "+departure+" - "+arrival+" útvonalon a kiválasztott napokon.");
+        }*/
+
+            //ArrayList<String> piecesOfTextSorted=(ArrayList<String>)piecesOfText.stream().sorted().collect(Collectors.toList());
+            //ArrayList<String> departureTimesUnique=(ArrayList<String>)departureTimes.stream().forEach();
+            //System.out.println(departureTimesUnique);
+            //ArrayList<String> departureTimesUnique=(ArrayList<String>)departureTimesText.stream().distinct().collect(Collectors.toList());
+            //ArrayList<String> pricesUnique=(ArrayList<String>)pricesText.stream().distinct().collect(Collectors.toList());
+
+
         }
-
-
-        //ArrayList<String> departureTimesUnique=(ArrayList<String>)departureTimesText.stream().distinct().collect(Collectors.toList());
-        //ArrayList<String> pricesUnique=(ArrayList<String>)pricesText.stream().distinct().collect(Collectors.toList());
-
-
     }
-}
