@@ -5,6 +5,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -15,8 +16,10 @@ public class ChooseInitializeDriver {
     //String browserName=System.getProperty("browser");
     String browserName="chrome";
 
-    private static SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-    private static String formatted = df.format(new Date());
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private static String formatted = dateFormat.format(new Date());
+
+    private static LocalDate todaysDate =LocalDate.now();
 
     public String projectRoot=System.getProperty("user.dir");
     private static ArrayList<String> toBeRead=new ArrayList<>();
@@ -51,5 +54,8 @@ public class ChooseInitializeDriver {
 
     public static String getFormatted() {
         return formatted;
+    }
+    public static LocalDate getTodaysDate() {
+        return todaysDate;
     }
 }

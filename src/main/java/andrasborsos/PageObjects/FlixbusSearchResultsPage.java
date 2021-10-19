@@ -25,9 +25,19 @@ public class FlixbusSearchResultsPage extends ChooseInitializeDriver {
     public ArrayList<ArrayList<WebElement>> getResults(){
         WebDriverWait webDriverWait=new WebDriverWait(driver,10);
         webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(departureTimeLocator));
-        ArrayList<ArrayList<WebElement>> results=new ArrayList<>();
-        //results.add(driver.findElements(departureTimeLocator),0);
-        return null;
+
+        ArrayList<ArrayList<WebElement>> resultsOrganized=new ArrayList<>();
+        ArrayList<WebElement> resultContainer=new ArrayList<>();
+
+        ArrayList<WebElement> resultsRowsOnPage=(ArrayList<WebElement>)driver.findElements(resultsLocator);
+        for(int i=0;i< resultsRowsOnPage.size();i++){
+            resultContainer=null;
+            addResultSubtypeToContainer(i,departureTimeLocator, driver,resultsRowsOnPage,resultContainer);
+            addResultSubtypeToContainer(i,priceLocator, driver,resultsRowsOnPage,resultContainer);
+            addResultSubtypeToContainer(i,departureTimeLocator, driver,resultsRowsOnPage,resultContainer);
+            resultsOrganized.add(resultContainer);
+        }
+        return resultsOrganized;
     }
 
     public ArrayList<WebElement> getDepartureTimes(){
@@ -40,5 +50,15 @@ public class FlixbusSearchResultsPage extends ChooseInitializeDriver {
     }
     public ArrayList<WebElement> getreservationErrorMessages(){
         return (ArrayList<WebElement>) driver.findElements(reservationErrorMessageLocator);
+    }
+
+    private ArrayList<WebElement> addResultSubtypeToContainer(int i, By resultSubtypeLocator,WebDriver driver, ArrayList<WebElement> resultsRowsOnPage, ArrayList<WebElement> resultContainer){
+        if(resultsRowsOnPage.get(i).findElements(resultSubtypeLocator).size()>0){
+            resultContainer.add(driver.findElement(resultSubtypeLocator));
+        }
+        else{
+            resultContainer.add(null);
+        }
+        return resultContainer;
     }
 }

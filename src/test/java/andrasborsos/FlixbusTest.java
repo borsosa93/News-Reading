@@ -9,6 +9,7 @@ import org.openqa.selenium.WebElement;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -19,6 +20,9 @@ public class FlixbusTest extends ChooseInitializeDriver {
     ArrayList<String> ticketsPrices = new ArrayList<>();
     private String departure = "Krakkó";
     private String arrival = "Budapest";
+    private String passengersAdults="2";
+    private String passengersChildren="0";
+    private String passengersBikes="0";
 
     @BeforeTest
     public void initialize() {
@@ -54,76 +58,98 @@ public class FlixbusTest extends ChooseInitializeDriver {
 
         flixbusHomePage.getPassengersOptions().click();
         flixbusHomePage.getAdultsInput().sendKeys(Keys.BACK_SPACE);
-        flixbusHomePage.getAdultsInput().sendKeys("2");
-        //flixbusHomePage.getbikesInput().sendKeys("2");
+        flixbusHomePage.getAdultsInput().sendKeys(passengersAdults);
+        flixbusHomePage.getChildrenInput().sendKeys(passengersChildren);
+        flixbusHomePage.getbikesInput().sendKeys(passengersBikes);
 
         flixbusHomePage.getsearchBTN().click();
 
         FlixbusSearchResultsPage flixbusSearchResultsPage = new FlixbusSearchResultsPage(driver);
-        parseSearchResults(flixbusSearchResultsPage.getDepartureTimes(), flixbusSearchResultsPage.getPrices(), flixbusSearchResultsPage.getreservationErrorMessages());
-
+        ticketsPrices.add("Jegyek a Flixbus "+departure+" - "+arrival+ " járatára "+ getTodaysDate().plusMonths(2)+"-án "+passengersAdults+ " felnőtt és "+passengersChildren+" gyerek részére "+passengersBikes+" kerékpárral:");
+        //parseSearchResults(flixbusSearchResultsPage.getDepartureTimes(), flixbusSearchResultsPage.getPrices(), flixbusSearchResultsPage.getreservationErrorMessages());
+        parseSearchResults(flixbusSearchResultsPage.getResults());
     }
 
     private int departureDay() {
-        int todayNumber = Integer.parseInt(getFormatted().split("-")[2]);
-        if (todayNumber > 28) {
-            todayNumber = 28;
-        }
-        return todayNumber;
+        LocalDate departureDate= getTodaysDate().plusMonths(2);
+        int departureDayNumber = Integer.parseInt(departureDate.toString().split("-")[2]);
+        return departureDayNumber;
     }
 
-    private void parseSearchResults(ArrayList<WebElement> departureTimes, ArrayList<WebElement> prices, ArrayList<WebElement> errorMessages) {
-        //ArrayList<String> departureTimesText=(ArrayList<String>)departureTimes.stream().forEach(webElement -> webElement.getText());
-        //ArrayList<String> departureTimesUnique= new ArrayList<String>();
-        //departureTimes.stream().map(WebElement::getText).forEach(departureTimesUnique::add);
-        //System.out.println(departureTimesUnique);
-        ArrayList<String> departureTimesText = new ArrayList<>();
-        ArrayList<String> pricesText = new ArrayList<>();
-        ArrayList<String> errorMessagesText = new ArrayList<>();
+    private void parseSearchResults(ArrayList<ArrayList<WebElement>> resultsOrganized) {
 
-        if (errorMessages.size() > 0) {
-            ticketsPrices.add("A következő hiba a találatokban:");
-            for (int i = 0; i < errorMessages.size(); i++) {
-                ticketsPrices.add(errorMessages.get(i).getText());
-            }
-            ticketsPrices.add("A hibáról képernyőfotót készítettem a projekt gyökérmappájába.");
-            System.out.println(ticketsPrices);
-            return;
-        }
+        ArrayList<WebElement> departureTimes = resultsOrganized.get(0);
+        ArrayList<WebElement> prices = resultsOrganized.get(1);
+        ArrayList<WebElement> errorMessages= resultsOrganized.get(2);
 
-        if (departureTimes.size() > 0) {
+        ArrayList<String> departureTimesText=new ArrayList<>();
 
+        //If there are departure times at all, then
+        if (!departureTimes.stream().allMatch(webElement -> webElement.equals(null))) {
+            //Find the indices of unique departure times
             departureTimes.stream().map(WebElement::getText).forEach(departureTimesText::add);
             ArrayList<String> departureTimesUnique = (ArrayList<String>) departureTimesText.stream().distinct().collect(Collectors.toList());
             ArrayList<Integer> uniqueIndeces = new ArrayList<>();
             for (int i = 0; i < departureTimesUnique.size(); i++) {
-                    uniqueIndeces.add(departureTimesText.indexOf(departureTimesUnique.get(i)));
-/*
-                ArrayList<String> departureTimesUnique = new ArrayList<>();
-                ArrayList<Integer> uniqueIndeces = new ArrayList<>();
-                boolean uniqueFlag = true;
-                for (int i = 0; i < departureTimes.size(); i++) {
-
-                    if (prices.size() > 0) {
-                        pricesText.add(prices.get(i).getText());
-                    }
-                    if (errorMessages.size() > 0) {
-                        errorMessagesText.add(errorMessages.get(i).getText());
-                    }
-                }*/
+                uniqueIndeces.add(departureTimesText.indexOf(departureTimesUnique.get(i)));
             }
-            System.out.println(uniqueIndeces);
-            }/*
-        else{
-            ticketsPrices.add("A Flixbusnál nincsenek jegyek a "+departure+" - "+arrival+" útvonalon a kiválasztott napokon.");
-        }*/
-
-            //ArrayList<String> piecesOfTextSorted=(ArrayList<String>)piecesOfText.stream().sorted().collect(Collectors.toList());
-            //ArrayList<String> departureTimesUnique=(ArrayList<String>)departureTimes.stream().forEach();
-            //System.out.println(departureTimesUnique);
-            //ArrayList<String> departureTimesUnique=(ArrayList<String>)departureTimesText.stream().distinct().collect(Collectors.toList());
-            //ArrayList<String> pricesUnique=(ArrayList<String>)pricesText.stream().distinct().collect(Collectors.toList());
-
-
+            //If the price belonging to the result defined by the time is not null, add them to be read
+            String ticketOption=null;
+            for (Integer uniqueIndex : uniqueIndeces) {
+                if(!(prices.get(uniqueIndex).getText().equalsIgnoreCase(""))){
+                    ticketOption = departureTimesText.get(uniqueIndex) + " időpontban ";
+                    ticketOption += prices.get(uniqueIndex).getText() + " áron";
+                    ticketsPrices.add(ticketOption);
+                }
+                else if(!(errorMessages.get(uniqueIndex).getText().equalsIgnoreCase(""))){
+                    ticketOption = departureTimesText.get(uniqueIndex) + " időponttal a következő probléma van ";
+                    ticketOption+=errorMessages.get(uniqueIndex).getText();
+                    ticketsPrices.add(ticketOption);
+                }
+            }
+        }
+        else {
+            ticketsPrices.add("A Flixbusnál nincsenek jegyek az útvonalon a kiválasztott paraméterekkel vagy hiba történt. Az oldalról képernyőfotót készítettem a projekt gyökérmappájába.");
         }
     }
+
+
+    private void parseSearchResults(ArrayList<WebElement> departureTimesWeb, ArrayList<WebElement> pricesWeb, ArrayList<WebElement> errorMessagesWeb) {
+
+        ArrayList<String> departureTimesText = new ArrayList<>();
+        //ArrayList<String> pricesTextUnique = new ArrayList<>();
+        ArrayList<String> errorMessagesTextUnique = new ArrayList<>();
+
+        if ((departureTimesWeb.size() > 0) && (pricesWeb.size()==departureTimesWeb.size())) {
+            //Finding the indices of unique departure times
+            departureTimesWeb.stream().map(WebElement::getText).forEach(departureTimesText::add);
+            ArrayList<String> departureTimesUnique = (ArrayList<String>) departureTimesText.stream().distinct().collect(Collectors.toList());
+            ArrayList<Integer> uniqueIndeces = new ArrayList<>();
+            for (int i = 0; i < departureTimesUnique.size(); i++) {
+                uniqueIndeces.add(departureTimesText.indexOf(departureTimesUnique.get(i)));
+            }
+            //Adding the unique elements to the arraylist to be read
+            String ticketOption;
+            for (Integer uniqueIndex : uniqueIndeces) {
+                ticketOption = departureTimesText.get(uniqueIndex) + " időpontban ";
+                ticketOption += pricesWeb.get(uniqueIndex).getText() + " áron";
+                ticketsPrices.add(ticketOption);
+            }
+            System.out.println(ticketsPrices);
+            }
+
+        if (!(pricesWeb.size() > 0)){
+            ticketsPrices.add("A Flixbusnál nincsenek jegyek az útvonalon a kiválasztott paraméterekkel.");
+        }
+
+        if (errorMessagesWeb.size() > 0) {
+            ticketsPrices.add("A következő hiba a találatokban:");
+            for (int i = 0; i < errorMessagesWeb.size(); i++) {
+                ticketsPrices.add(errorMessagesWeb.get(i).getText());
+            }
+            ticketsPrices.add("A hibáról képernyőfotót készítettem a projekt gyökérmappájába.");
+            System.out.println(ticketsPrices);
+        }
+
+    }
+}
