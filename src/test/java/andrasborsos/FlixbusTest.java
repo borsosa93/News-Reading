@@ -3,6 +3,7 @@ package andrasborsos;
 import andrasborsos.PageObjects.FlixbusHomePage;
 import andrasborsos.PageObjects.FlixbusSearchResultsPage;
 import andrasborsos.resources.ChooseInitializeDriver;
+import org.junit.Assert;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -65,9 +66,11 @@ public class FlixbusTest extends ChooseInitializeDriver {
         flixbusHomePage.getsearchBTN().click();
 
         FlixbusSearchResultsPage flixbusSearchResultsPage = new FlixbusSearchResultsPage(driver);
-        ticketsPrices.add("Jegyek a Flixbus "+departure+" - "+arrival+ " járatára "+ getTodaysDate().plusMonths(2)+"-án "+passengersAdults+ " felnőtt és "+passengersChildren+" gyerek részére "+passengersBikes+" kerékpárral:");
+        ticketsPrices.add("Jegyek a Flixbus "+departure+" - "+arrival+ " járatára "+ getTodaysDate().plusMonths(2)+" napon "+passengersAdults+ " felnőtt és "+passengersChildren+" gyerek részére "+passengersBikes+" kerékpárral:");
         //parseSearchResults(flixbusSearchResultsPage.getDepartureTimes(), flixbusSearchResultsPage.getPrices(), flixbusSearchResultsPage.getreservationErrorMessages());
         parseSearchResults(flixbusSearchResultsPage.getResults());
+        flixbusSearchResultsPage.getreserveBTN().click();
+
         System.out.println(ticketsPrices);
     }
 
@@ -79,74 +82,45 @@ public class FlixbusTest extends ChooseInitializeDriver {
 
     private void parseSearchResults(ArrayList<ArrayList<WebElement>> resultsOrganized) {
 
-        for (int i = 0; i < resultsOrganized.size(); i++) {
-           for(int j=0;j<resultsOrganized.get(0).size();j++){
-               if(resultsOrganized.get(i).get(j)==(null))
-                   System.out.println("null array element");
-               else if (resultsOrganized.get(i).get(j).getText()==null)
-                   System.out.println("null text");
-               else
-                   System.out.println(resultsOrganized.get(i).get(j).getText());
-           }
-            System.out.println("\n");
-        }
-
-        resultsOrganized=transpose(resultsOrganized);
-
-        for (int i = 0; i < resultsOrganized.size(); i++) {
-            for(int j=0;j<resultsOrganized.get(0).size();j++){
-                if(resultsOrganized.get(i).get(j)==(null))
-                    System.out.println("null array element");
-                else if (resultsOrganized.get(i).get(j).getText()==null)
-                    System.out.println("null text");
-                else
-                    System.out.println(resultsOrganized.get(i).get(j).getText());
-            }
-            System.out.println("\n");
-        }
+        resultsOrganized = transpose(resultsOrganized);
 
         ArrayList<WebElement> departureTimes = resultsOrganized.get(0);
         ArrayList<WebElement> prices = resultsOrganized.get(1);
-        ArrayList<WebElement> errorMessages= resultsOrganized.get(2);
+        ArrayList<WebElement> errorMessages = resultsOrganized.get(2);
 
-        ArrayList<String> departureTimesText=new ArrayList<>();
+        ArrayList<String> departureTimesText = new ArrayList<>();
 
         //If there are departure times at all, then
-        if (!(departureTimes.stream().allMatch(webElement -> webElement==null))) {
+        if (!(departureTimes.stream().allMatch(webElement -> webElement == null))) {
             //Find the indices of unique departure times
-            //departureTimes.stream().map(WebElement::getText).forEach(departureTimesText::add);
-            /*for(WebElement element:departureTimes){
-                if(element.getText()==null){
-                    System.out.println("null text");
-                }
-                else System.out.println(departureTimesText.add(element.getText()));
-            }*/
+            departureTimes.stream().map(WebElement::getText).forEach(departureTimesText::add);
             ArrayList<String> departureTimesUnique = (ArrayList<String>) departureTimesText.stream().distinct().collect(Collectors.toList());
             ArrayList<Integer> uniqueIndeces = new ArrayList<>();
             for (int i = 0; i < departureTimesUnique.size(); i++) {
                 uniqueIndeces.add(departureTimesText.indexOf(departureTimesUnique.get(i)));
             }
-            System.out.println(uniqueIndeces);
             //If the price belonging to the result defined by the time is not null, add them to be read
-            String ticketOption=null;
+            String ticketOption = null;
+            int faultyResultCounter = 0;
             for (Integer uniqueIndex : uniqueIndeces) {
-                if(!(prices.get(uniqueIndex).getText().equalsIgnoreCase(""))){
+                if ((!(prices.get(uniqueIndex) == null)) && (!(prices.get(uniqueIndex).getText() == null))) {
                     ticketOption = departureTimesText.get(uniqueIndex) + " időpontban ";
                     ticketOption += prices.get(uniqueIndex).getText() + " áron";
                     ticketsPrices.add(ticketOption);
-                }
-                else if(!(errorMessages.get(uniqueIndex).getText().equalsIgnoreCase(""))){
+                } else if ((!(errorMessages.get(uniqueIndex) == null)) && (!(errorMessages.get(uniqueIndex).getText() == null))) {
                     ticketOption = departureTimesText.get(uniqueIndex) + " időponttal a következő probléma van ";
-                    ticketOption+=errorMessages.get(uniqueIndex).getText();
+                    ticketOption += errorMessages.get(uniqueIndex).getText();
                     ticketsPrices.add(ticketOption);
+                    faultyResultCounter++;
                 }
+                Assert.assertNotEquals(uniqueIndeces.size(), faultyResultCounter);
             }
         }
-        else {
-            ticketsPrices.add("A Flixbusnál nincsenek jegyek az útvonalon a kiválasztott paraméterekkel vagy hiba történt. Az oldalról képernyőfotót készítettem a projekt gyökérmappájába.");
+        else{
+                ticketsPrices.add("A Flixbusnál nincsenek jegyek az útvonalon a kiválasztott paraméterekkel vagy hiba történt. Az oldalról képernyőfotót készítettem a projekt gyökérmappájába.");
+                Assert.assertTrue(false);
+            }
         }
-    }
-
     private ArrayList<ArrayList<WebElement>> transpose(ArrayList<ArrayList<WebElement>> matrixIn) {
         ArrayList<ArrayList<WebElement>> transposedMatrix = new ArrayList<ArrayList<WebElement>>();
         if (!matrixIn.isEmpty()) {

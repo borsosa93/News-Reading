@@ -19,8 +19,9 @@ public class FlixbusSearchResultsPage extends ChooseInitializeDriver {
 
     By resultsLocator= new By.ByCssSelector(".ResultsList__resultsList___3yIIM>div");
     By departureTimeLocator=new By.ByCssSelector("div.LocationsHorizontal__departureTime___1_wvV");
-    By priceLocator=new By.ByCssSelector("div.SearchResultShop__price___2U4SB");
+    By priceLocator=new By.ByCssSelector("[data-e2e='search-result-prices'][class*='rice']");
     By reservationErrorMessageLocator=new By.ByCssSelector("div.SearchResult__bookingMessage___10x2O");
+    By reserveBTNLocator=new By.ByCssSelector("button[data-e2e='button-reserve-trip']");
 
     public ArrayList<ArrayList<WebElement>> getResults(){
         WebDriverWait webDriverWait=new WebDriverWait(driver,10);
@@ -39,16 +40,8 @@ public class FlixbusSearchResultsPage extends ChooseInitializeDriver {
         return resultsOrganized;
     }
 
-    public ArrayList<WebElement> getDepartureTimes(){
-        WebDriverWait webDriverWait=new WebDriverWait(driver,10);
-        webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(departureTimeLocator));
-        return (ArrayList<WebElement>) driver.findElements(departureTimeLocator);
-    }
-    public ArrayList<WebElement> getPrices(){
-        return (ArrayList<WebElement>) driver.findElements(priceLocator);
-    }
-    public ArrayList<WebElement> getreservationErrorMessages(){
-        return (ArrayList<WebElement>) driver.findElements(reservationErrorMessageLocator);
+    public WebElement getreserveBTN(){
+        return driver.findElement(reserveBTNLocator);
     }
 
     private ArrayList<WebElement> addResultSubtypeToContainer(int i, By resultSubtypeLocator,WebDriver driver, ArrayList<WebElement> resultsRowsOnPage, ArrayList<WebElement> resultContainer){
