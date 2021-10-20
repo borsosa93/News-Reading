@@ -43,6 +43,11 @@
             </class>
         </classes>
     </test>
+    <test name="Flixbus jegyek">
+        <classes>
+            <class name="andrasborsos.FlixbusTest"/>
+        </classes>
+    </test>
     <test name="ReadResults">
         <classes>
             <class name="andrasborsos.ReadResultsTest">
