@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All Test Suite">
+    <test name="Initialize">
+        <classes>
+            <class name="andrasborsos.Initialize">
+                <methods>
+                    <include name="initialize"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    <test name="Mai névnap">
+        <classes>
+            <class name="andrasborsos.MainevnapTest">
+                <methods>
+                    <include name="todaysNamesdays"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    <test name="Gazdasági hírek" preserve-order="true">
+        <classes>
+            <class name="andrasborsos.PortfolioTest">
+                <methods>
+                    <include name="exchangeRates"/>
+                    <include name="economyArticles"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    <test name="Autós hírek" >
+        <classes>
+            <class name="andrasborsos.TotalcarTest"/>
+        </classes>
+    </test>
+    <test name="Használtautó">
+        <classes>
+            <class name="andrasborsos.HasznaltautoTest">
+                <methods>
+                    <include name="motorbikesPrices"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    <test name="Flixbus jegyek">
+        <classes>
+            <class name="andrasborsos.FlixbusTest"/>
+        </classes>
+    </test>
+    <test name="ReadResults">
+        <classes>
+            <class name="andrasborsos.ReadResultsTest">
+                <methods>
+                    <include name="readResults"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>
