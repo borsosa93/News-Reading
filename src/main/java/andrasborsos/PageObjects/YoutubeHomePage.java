@@ -7,9 +7,11 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.IOException;
+
 public class YoutubeHomePage extends InitializeDriver {
 
-    public YoutubeHomePage(WebDriver driver) {
+    public YoutubeHomePage(WebDriver driver) throws IOException {
         this.driver = driver;
     }
 

@@ -20,6 +20,9 @@ public class TotalcarTest extends InitializeDriver {
     ArrayList<String> coverPageArticlesTitles =new ArrayList<>();
     ArrayList<String> WTCRArticlesTitles =new ArrayList<>();
 
+    public TotalcarTest() throws IOException {
+    }
+
     @BeforeTest
     public void initialize() throws IOException {
         this.driver=initializeDriver();
@@ -27,7 +30,7 @@ public class TotalcarTest extends InitializeDriver {
     }
 
     @Test
-    public void carNews(){
+    public void carNews() throws IOException {
         TotalcarPage totalcarPage=new TotalcarPage(driver);
         totalcarPage.getacceptCookiesBTN().click();
         coverPageArticlesTitles.add("Autós-motoros hírek a totalcar pont huról.");

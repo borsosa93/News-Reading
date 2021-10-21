@@ -5,11 +5,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.io.IOException;
 import java.util.List;
 
 public class MainevnapPage extends InitializeDriver {
 
-    public MainevnapPage(WebDriver driver) {
+    public MainevnapPage(WebDriver driver) throws IOException {
         this.driver = driver;
     }
     public WebDriver driver;

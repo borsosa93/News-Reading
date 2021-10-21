@@ -7,9 +7,11 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.IOException;
+
 public class GoogleTranslatePage extends InitializeDriver {
 
-    public GoogleTranslatePage(WebDriver driver) {
+    public GoogleTranslatePage(WebDriver driver)throws IOException {
         this.driver = driver;
     }
 
