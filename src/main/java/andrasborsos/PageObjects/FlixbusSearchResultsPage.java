@@ -29,8 +29,10 @@ public class FlixbusSearchResultsPage extends ChooseInitializeDriver {
 
     public ArrayList<ArrayList<WebElement>> getResults(){
         WebDriverWait webDriverWait=new WebDriverWait(driver,8);
-        webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(departureTimeLocator));
-
+        try {
+            webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(departureTimeLocator));
+        }catch (Exception exception){
+        }
         ArrayList<ArrayList<WebElement>> resultsOrganized=new ArrayList<>();
 
         ArrayList<WebElement> resultsRowsOnPage=(ArrayList<WebElement>)driver.findElements(resultsLocator);
@@ -58,10 +60,13 @@ public class FlixbusSearchResultsPage extends ChooseInitializeDriver {
     }
 
     public WebElement getNoTicketsMessage(){
-        if(driver.findElements(noTicketsMessageLocator).size()>0) {
+        WebDriverWait webDriverWait=new WebDriverWait(driver,5);
+        try {
+            webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(noTicketsMessageLocator));
             return driver.findElement(noTicketsMessageLocator);
+        }catch (Exception exception){
+            return null;
         }
-        else return null;
     }
 
     private ArrayList<WebElement> addResultSubtypeToContainer(int i, By resultSubtypeLocator,WebDriver driver, ArrayList<WebElement> resultsRowsOnPage, ArrayList<WebElement> resultContainer){
