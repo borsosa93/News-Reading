@@ -1,25 +1,29 @@
 package andrasborsos;
 
 import andrasborsos.PageObjects.TotalcarPage;
-import andrasborsos.resources.ChooseInitializeDriver;
+import andrasborsos.resources.InitializeDriver;
+import andrasborsos.resources.Utilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
-public class TotalcarTest extends ChooseInitializeDriver {
+import static andrasborsos.resources.Utilities.getProperty;
+
+public class TotalcarTest extends InitializeDriver {
 
     WebDriver driver;
     ArrayList<String> coverPageArticlesTitles =new ArrayList<>();
     ArrayList<String> WTCRArticlesTitles =new ArrayList<>();
 
     @BeforeTest
-    public void initialize(){
+    public void initialize() throws IOException {
         this.driver=initializeDriver();
-        driver.get("https://totalcar.hu/");
+        driver.get(getProperty("totalcarURL"));
     }
 
     @Test
@@ -41,9 +45,9 @@ public class TotalcarTest extends ChooseInitializeDriver {
     @AfterTest
     public void postproc(){
         driver.close();
-        addToBeRead(coverPageArticlesTitles);
+        Utilities.addToBeRead(coverPageArticlesTitles);
         if(WTCRArticlesTitles.size()>0){
-            addToBeRead(WTCRArticlesTitles);
+            Utilities.addToBeRead(WTCRArticlesTitles);
         }
     }
 

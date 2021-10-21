@@ -1,13 +1,13 @@
 package andrasborsos.PageObjects;
 
-import andrasborsos.resources.ChooseInitializeDriver;
+import andrasborsos.resources.InitializeDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class GoogleTranslatePage extends ChooseInitializeDriver {
+public class GoogleTranslatePage extends InitializeDriver {
 
     public GoogleTranslatePage(WebDriver driver) {
         this.driver = driver;
@@ -17,7 +17,6 @@ public class GoogleTranslatePage extends ChooseInitializeDriver {
 
     By acceptCookiesBTNLocator =new By.ByCssSelector("button[jsname='higCR']");
     By inputTextBoxLocator=new By.ByCssSelector("textarea[class='er8xn']");
-    By moreLanguagesBTN=new By.ByCssSelector("button[jsname='RCbdJd']");
     By readBTNLocator =new By.ByCssSelector("button[jscontroller='xzbRj']");
 
     public WebElement getInputTextBox(){

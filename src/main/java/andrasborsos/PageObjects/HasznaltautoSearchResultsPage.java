@@ -1,6 +1,6 @@
 package andrasborsos.PageObjects;
 
-import andrasborsos.resources.ChooseInitializeDriver;
+import andrasborsos.resources.InitializeDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -9,7 +9,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.ArrayList;
 
-public class HasznaltautoSearchResultsPage extends ChooseInitializeDriver {
+public class HasznaltautoSearchResultsPage extends InitializeDriver {
 
     public HasznaltautoSearchResultsPage(WebDriver driver) {
         this.driver=driver;

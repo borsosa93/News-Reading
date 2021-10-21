@@ -1,37 +1,44 @@
 package andrasborsos;
 
 import andrasborsos.PageObjects.PortfolioPage;
-import andrasborsos.resources.ChooseInitializeDriver;
+import andrasborsos.resources.InitializeDriver;
+import andrasborsos.resources.Utilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
-public class PortfolioTest extends ChooseInitializeDriver {
+import static andrasborsos.resources.Utilities.getProperty;
+import static andrasborsos.resources.Utilities.setProperty;
+
+public class PortfolioTest extends InitializeDriver {
 
     WebDriver driver;
     ArrayList<String> ratesEURUSD=new ArrayList<>();
     ArrayList<String> articlesTitles=new ArrayList<>();
 
     @BeforeTest
-    public void initialize(){
+    public void initialize() throws IOException {
         driver=initializeDriver();
-        driver.get("https://www.portfolio.hu/");
+        driver.get(getProperty("portfolioURL"));
     }
 
     @Test
-    public void exchangeRates(){
-        String rate="Az euró árfolyama ";
+    public void exchangeRates() throws IOException {
         PortfolioPage portfolioPage=new PortfolioPage(driver);
         driver.switchTo().frame(1);
         portfolioPage.getAcceptCookiesBTN().click();
         driver.switchTo().defaultContent();
         portfolioPage.getdismissNotificationsBTN().click();
+        setProperty("EURHUF",portfolioPage.getEURHUF().getText());
+        String rate="Az euró árfolyama ";
         rate+=portfolioPage.getEURHUF().getText()+" Ft.";
         ratesEURUSD.add(rate);
+        setProperty("USDHUF",portfolioPage.getUSDHUF().getText());
         rate="A dollár árfolyama ";
         rate+=portfolioPage.getUSDHUF().getText()+" Ft.";
         ratesEURUSD.add(rate);
@@ -50,7 +57,7 @@ public class PortfolioTest extends ChooseInitializeDriver {
     @AfterTest
     public void postproc(){
         driver.close();
-        addToBeRead(ratesEURUSD);
-        addToBeRead(articlesTitles);
+        Utilities.addToBeRead(ratesEURUSD);
+        Utilities.addToBeRead(articlesTitles);
     }
 }
