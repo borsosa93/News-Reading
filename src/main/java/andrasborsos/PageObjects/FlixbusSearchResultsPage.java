@@ -7,11 +7,12 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class FlixbusSearchResultsPage extends InitializeDriver {
 
-    public FlixbusSearchResultsPage(WebDriver driver) {
+    public FlixbusSearchResultsPage(WebDriver driver) throws IOException {
         this.driver = driver;
     }
 

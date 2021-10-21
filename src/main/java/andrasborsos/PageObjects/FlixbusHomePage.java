@@ -8,16 +8,18 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class FlixbusHomePage extends InitializeDriver {
 
-    public FlixbusHomePage(WebDriver driver) {
+    public FlixbusHomePage(WebDriver driver)throws IOException {
         this.driver = driver;
     }
 
     WebDriver driver;
-    private int firstActiveDayIndexLeft=-1;
+    private int firstActiveDayIndex =-1;
+    private int firstActiveDayNumber=-1;
     private int departureDayIndex=-1;
     private int arrivalDayIndex=-1;
 
@@ -34,6 +36,7 @@ public class FlixbusHomePage extends InitializeDriver {
     By departureCalendarLocator =new By.ByCssSelector("input[data-e2e='departure-date-input-field']");
     By arrivalCalendarLocator =new By.ByCssSelector("input[data-e2e='arrival-date-input-field']");
     By calendarTodayLocator = new By.ByCssSelector(".DayPicker-Day--today");
+    By calendarFirstActiveDayTextLocator=new By.ByCssSelector("span");
     By calendarNextMonthBTNLocator=new By.ByCssSelector(".flix-icon-arrow-right");
     By calendarMonthsLocator=new By.ByCssSelector(".DayPicker-Months");
     By calendarDay=new By.ByCssSelector(".DayPicker-Day");
@@ -103,21 +106,22 @@ public class FlixbusHomePage extends InitializeDriver {
         ArrayList<WebElement> allDays=(ArrayList<WebElement>)driver.findElement(calendarMonthsLocator).findElements(calendarDay);
         for (int i = 0; i <allDays.size() ; i++) {
             if(!Boolean.parseBoolean(allDays.get(i).getAttribute("aria-disabled"))){
-                firstActiveDayIndexLeft=i;
+                firstActiveDayIndex =i;
+                firstActiveDayNumber=Integer.parseInt((allDays.get(i).findElement(calendarFirstActiveDayTextLocator).getText()));
                 break;
             }
         }
-        departureDayIndex=firstActiveDayIndexLeft+departureDay-1;
+        departureDayIndex= firstActiveDayIndex-firstActiveDayNumber +departureDay;
         return allDays.get(departureDayIndex);
     }
 
-    public WebElement getArrivalDay(){
+    public WebElement getArrivalDay(int stayLength){
         ArrayList<WebElement> allDays=(ArrayList<WebElement>)driver.findElement(calendarMonthsLocator).findElements(calendarDay);
-        if(!Boolean.parseBoolean(allDays.get(departureDayIndex+7).getAttribute("aria-disabled"))){
-            arrivalDayIndex=departureDayIndex+7;
+        if(!Boolean.parseBoolean(allDays.get(departureDayIndex+stayLength).getAttribute("aria-disabled"))){
+            arrivalDayIndex=departureDayIndex+stayLength;
         }
         else{
-            for (int i = departureDayIndex+7; i <7 ; i++) {
+            for (int i = departureDayIndex+stayLength; i <7 ; i++) {
                 if(!Boolean.parseBoolean(allDays.get(i).getAttribute("aria-disabled"))){
                     arrivalDayIndex=i;
                     break;

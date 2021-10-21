@@ -21,6 +21,9 @@ public class PortfolioTest extends InitializeDriver {
     ArrayList<String> ratesEURUSD=new ArrayList<>();
     ArrayList<String> articlesTitles=new ArrayList<>();
 
+    public PortfolioTest() throws IOException {
+    }
+
     @BeforeTest
     public void initialize() throws IOException {
         driver=initializeDriver();
@@ -45,7 +48,7 @@ public class PortfolioTest extends InitializeDriver {
     }
 
     @Test(dependsOnMethods = {"exchangeRates"})
-    public void economyArticles(){
+    public void economyArticles() throws IOException {
         articlesTitles.add("Gazdasági hírek a portfólió pont huról.");
         PortfolioPage portfolioPage=new PortfolioPage(driver);
         ArrayList<WebElement> articles=portfolioPage.getCoverPageArticles();

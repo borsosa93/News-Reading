@@ -7,10 +7,15 @@ import org.openqa.selenium.WebDriver;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import java.io.IOException;
+
 public class YoutubeRidersTest extends InitializeDriver {
 
     WebDriver driver;
     String videoTitle="";
+
+    public YoutubeRidersTest() throws IOException {
+    }
 
     @BeforeTest
     public void initialize(){
@@ -19,7 +24,7 @@ public class YoutubeRidersTest extends InitializeDriver {
     }
 
     @Test
-    public void ridersNewVideoTest(){
+    public void ridersNewVideoTest() throws IOException {
         YoutubeHomePage youtubeHomePage=new YoutubeHomePage(driver);
         youtubeHomePage.getAcceptCookiesButton().click();
         youtubeHomePage.getInputTextBox().click();

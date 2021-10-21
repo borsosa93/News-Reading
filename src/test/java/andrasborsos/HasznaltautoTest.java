@@ -1,6 +1,6 @@
 package andrasborsos;
 
-import andrasborsos.PageObjects.HasznaltautoPage;
+import andrasborsos.PageObjects.HasznaltautoHomePage;
 import andrasborsos.PageObjects.HasznaltautoSearchResultsPage;
 import andrasborsos.resources.InitializeDriver;
 import andrasborsos.resources.Utilities;
@@ -33,14 +33,14 @@ public class HasznaltautoTest extends InitializeDriver {
 
     @Test
     public void motorbikesPrices() throws IOException {
-        HasznaltautoPage hasznaltautoPage=new HasznaltautoPage(driver);
-        hasznaltautoPage.getAcceptCookiesBTN().click();
-        hasznaltautoPage.getMotorbikeBTN().click();
-        hasznaltautoPage.getMakeDropDown().click();
-        hasznaltautoPage.getChosenMake(makeToFind).click();
-        hasznaltautoPage.getModelDropDown().click();
-        hasznaltautoPage.getChosenModel(modelToFind).click();
-        hasznaltautoPage.getSearchBTN().click();
+        HasznaltautoHomePage hasznaltautoHomePage =new HasznaltautoHomePage(driver);
+        hasznaltautoHomePage.getAcceptCookiesBTN().click();
+        hasznaltautoHomePage.getMotorbikeBTN().click();
+        hasznaltautoHomePage.getMakeDropDown().click();
+        hasznaltautoHomePage.getChosenMake(makeToFind).click();
+        hasznaltautoHomePage.getModelDropDown().click();
+        hasznaltautoHomePage.getChosenModel(modelToFind).click();
+        hasznaltautoHomePage.getSearchBTN().click();
 
         HasznaltautoSearchResultsPage hasznaltautoSearchResultsPage=new HasznaltautoSearchResultsPage(driver);
         motorbikesAVGPrice.add("Jelenleg "+hasznaltautoSearchResultsPage.getPrices().size()+" darab eladó "+makeToFind+" "+modelToFind+" található a használtautó.hun.");
@@ -53,14 +53,15 @@ public class HasznaltautoTest extends InitializeDriver {
         Utilities.addToBeRead(motorbikesAVGPrice);
     }
 
-    int parsePrices(ArrayList<WebElement> pricesList) throws IOException {
+    double parsePrices(ArrayList<WebElement> pricesList) throws IOException {
         String priceToParse;
-        int priceAVG=0;
+        double priceAVG=0;
         for (WebElement webElement : pricesList) {
             //get the elements' text and delete hard spaces
             priceToParse = webElement.getText().replace(" ", "");
             if (priceToParse.contains("€")) {
-                priceAVG += (Integer.parseInt(priceToParse.split("€")[1])) * Integer.parseInt(getProperty("EURHUF"));
+                priceAVG += (Integer.parseInt(priceToParse.split("€")[1])) * (Double.parseDouble(getProperty("EURHUF").replace(",",".")));
+
             } else {
                 priceAVG += Integer.parseInt(priceToParse.split("Ft")[0]);
             }

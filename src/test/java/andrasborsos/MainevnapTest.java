@@ -20,6 +20,9 @@ public class MainevnapTest extends InitializeDriver {
    private String namesdays="Ma ";
    private WebDriver driver;
 
+    public MainevnapTest() throws IOException {
+    }
+
     @BeforeTest
     public void initialize() throws IOException {
         driver=initializeDriver();
@@ -27,7 +30,7 @@ public class MainevnapTest extends InitializeDriver {
     }
 
     @Test
-    public void todaysNamesdays(){
+    public void todaysNamesdays() throws IOException {
         MainevnapPage mainevnapPage=new MainevnapPage(driver);
         List<WebElement> namesdaysList=mainevnapPage.getNamesdays();
         Iterator<WebElement> iterator= namesdaysList.listIterator();

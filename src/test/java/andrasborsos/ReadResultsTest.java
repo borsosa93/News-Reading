@@ -14,14 +14,17 @@ public class ReadResultsTest extends InitializeDriver {
 
     private WebDriver driver;
 
+    public ReadResultsTest() throws IOException {
+    }
+
     @BeforeTest
-    public void initialize() throws IOException {
+    public void initialize(){
         driver=initializeDriver();
         driver.get("https://translate.google.com/");
     }
 
     @Test
-    public void readResults(){
+    public void readResults() throws IOException {
         GoogleTranslatePage googleTranslatePage=new GoogleTranslatePage(driver);
         googleTranslatePage.getAcceptCookiesButton().click();
         ArrayList<String> textToBeRead= Utilities.getToBeRead();
