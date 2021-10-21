@@ -1,11 +1,10 @@
 package andrasborsos;
 
 import andrasborsos.PageObjects.MainevnapPage;
-import andrasborsos.resources.ChooseInitializeDriver;
-import andrasborsos.resources.StringParser;
+import andrasborsos.resources.InitializeDriver;
+import andrasborsos.resources.Utilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -14,7 +13,9 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-public class MainevnapTest extends ChooseInitializeDriver implements StringParser {
+import static andrasborsos.resources.Utilities.getProperty;
+
+public class MainevnapTest extends InitializeDriver {
 
    private String namesdays="Ma ";
    private WebDriver driver;
@@ -22,6 +23,7 @@ public class MainevnapTest extends ChooseInitializeDriver implements StringParse
     @BeforeTest
     public void initialize() throws IOException {
         driver=initializeDriver();
+        driver.get(getProperty("maiNevnapURL"));
     }
 
     @Test
@@ -44,13 +46,8 @@ public class MainevnapTest extends ChooseInitializeDriver implements StringParse
     @AfterTest
     public void postproc(){
         driver.close();
-        editStringToRead();
-        addToBeRead(namesdays);
+        Utilities.addToBeRead((namesdays+"névnapja van."));
     }
 
-    @Override
-    public void editStringToRead() {
-        namesdays+="névnapja van.";
-    }
 
 }

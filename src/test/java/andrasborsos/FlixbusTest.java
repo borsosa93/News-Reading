@@ -2,8 +2,9 @@ package andrasborsos;
 
 import andrasborsos.PageObjects.FlixbusHomePage;
 import andrasborsos.PageObjects.FlixbusSearchResultsPage;
-import andrasborsos.resources.ChooseInitializeDriver;
+import andrasborsos.resources.InitializeDriver;
 
+import andrasborsos.resources.Utilities;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -12,51 +13,46 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+import static andrasborsos.resources.Utilities.getProperty;
 
-public class FlixbusTest extends ChooseInitializeDriver {
+public class FlixbusTest extends InitializeDriver {
 
     WebDriver driver;
     ArrayList<String> ticketsPrices = new ArrayList<>();
-    private String departure = "Budapest";
-    private String arrival = "Moss";
-    private String passengersAdults="2";
-    private String passengersChildren="0";
-    private String passengersBikes="0";
-    private int monthOffset=0;
-    private int stayLengthDays=7;
-    private boolean noTicketsFlag=true;
 
     @BeforeTest
-    public void initialize() {
+    public void initialize() throws IOException {
         this.driver = initializeDriver();
-        driver.get("https://www.flixbus.hu/");
+        driver.get(getProperty("flixbusURL"));
     }
 
     @Test
-    public void busTicketPrices() {
+    public void busTicketPrices() throws IOException {
         FlixbusHomePage flixbusHomePage = new FlixbusHomePage(driver);
         flixbusHomePage.getAcceptCookiesBTN().click();
         flixbusHomePage.getRoundtripRBTN().click();
 
         flixbusHomePage.getDepartureInputBox().click();
-        flixbusHomePage.getDepartureInputBox().sendKeys(departure);
+        flixbusHomePage.getDepartureInputBox().sendKeys(getProperty("departure"));
         flixbusHomePage.getCity().click();
 
         flixbusHomePage.getArrivalInputBox().click();
-        flixbusHomePage.getArrivalInputBox().sendKeys(arrival);
+        flixbusHomePage.getArrivalInputBox().sendKeys(getProperty("arrival"));
         flixbusHomePage.getCity().click();
 
         //Make sure the calendar starts at today
         flixbusHomePage.getDepartureCalendar().click();
         flixbusHomePage.getCalendarToday().click();
         flixbusHomePage.getDepartureCalendar().click();
-        //Pick today's number day two months from now
-        flixbusHomePage.getCalendarNextMonthBTN().click();
-        flixbusHomePage.getCalendarNextMonthBTN().click();
+        //Pick today's number day some months from now (specified as property)
+        for(int i=1;i<=Integer.parseInt(getProperty("monthOffset"));i++){
+            flixbusHomePage.getCalendarNextMonthBTN().click();
+        }
         flixbusHomePage.getDepartureDay(departureDay()).click();
         //Pick return date a week from then
         flixbusHomePage.getArrivalCalendar().click();
@@ -64,46 +60,40 @@ public class FlixbusTest extends ChooseInitializeDriver {
 
         flixbusHomePage.getPassengersOptions().click();
         flixbusHomePage.getAdultsInput().sendKeys(Keys.BACK_SPACE);
-        flixbusHomePage.getAdultsInput().sendKeys(passengersAdults);
-        flixbusHomePage.getChildrenInput().sendKeys(passengersChildren);
-        flixbusHomePage.getbikesInput().sendKeys(passengersBikes);
+        flixbusHomePage.getAdultsInput().sendKeys(getProperty("adults"));
+        flixbusHomePage.getChildrenInput().sendKeys(getProperty("children"));
+        flixbusHomePage.getbikesInput().sendKeys(getProperty("bikes"));
 
         flixbusHomePage.getsearchBTN().click();
 
         FlixbusSearchResultsPage flixbusSearchResultsPage = new FlixbusSearchResultsPage(driver);
-        ticketsPrices.add("Jegyek a Flixbus "+departure+" - "+arrival+ " járatára "+ getTodaysDate().plusMonths(monthOffset)+" napon "+passengersAdults+ " felnőtt és "+passengersChildren+" gyerek részére "+passengersBikes+" kerékpárral:");
+        ticketsPrices.add("Jegyek a Flixbus "+getProperty("departure")+" - "+getProperty("arrival")+ " járatára "+ Utilities.getTodaysDate().plusMonths(Integer.parseInt(getProperty("monthOffset")))+" napon "+getProperty("adults")+ " felnőtt és "+getProperty("children")+" gyerek részére "+getProperty("bikes")+" kerékpárral:");
         noTicketsMessage(flixbusSearchResultsPage.getNoTicketsMessage());
         parseSearchResults(flixbusSearchResultsPage.getResults());
 
-        //if(noTicketsFlag==false){
-            flixbusSearchResultsPage.getreserveBTN().click();
-            flixbusSearchResultsPage.waitToLeaveResultsPage();
-            ticketsPrices.add("Jegyek a visszaútra "+getTodaysDate().plusMonths(monthOffset).plusDays(stayLengthDays)+" napon:");
-            noTicketsMessage(flixbusSearchResultsPage.getNoTicketsMessage());
-            parseSearchResults(flixbusSearchResultsPage.getResults());
-            flixbusSearchResultsPage.getdeleteReservationBTN().click();
-        //}
-
-        System.out.println(ticketsPrices);
+        flixbusSearchResultsPage.getreserveBTN().click();
+        flixbusSearchResultsPage.waitToLeaveResultsPage();
+        ticketsPrices.add("Jegyek a visszaútra "+ Utilities.getTodaysDate().plusMonths(Integer.parseInt(getProperty("monthOffset"))).plusDays(Integer.parseInt(getProperty("stayLengthDays")))+" napon:");
+        noTicketsMessage(flixbusSearchResultsPage.getNoTicketsMessage());
+        parseSearchResults(flixbusSearchResultsPage.getResults());
+        flixbusSearchResultsPage.getdeleteReservationBTN().click();
     }
 
     @AfterTest
     public void postproc(){
         driver.close();
-        addToBeRead(ticketsPrices);
+        Utilities.addToBeRead(ticketsPrices);
     }
 
-    private int departureDay() {
-        LocalDate departureDate= getTodaysDate().plusMonths(monthOffset);
-        int departureDayNumber = Integer.parseInt(departureDate.toString().split("-")[2]);
-        return departureDayNumber;
+    private int departureDay() throws IOException {
+        LocalDate departureDate= Utilities.getTodaysDate().plusMonths(Integer.parseInt(getProperty("monthOffset")));
+        return Integer.parseInt(departureDate.toString().split("-")[2]);
     }
     private void noTicketsMessage(WebElement message){
         if(!(message==null)){
             ticketsPrices.add(("Hibaüzenet az oldalon: "+message.getText()));
             Assert.fail();
         }
-        else noTicketsFlag=false;
     }
     private void parseSearchResults(ArrayList<ArrayList<WebElement>> resultsOrganized) {
         //if(!noTicketsFlag&&!(resultsOrganized.isEmpty())){
@@ -120,11 +110,11 @@ public class FlixbusTest extends ChooseInitializeDriver {
                 departureTimes.stream().map(WebElement::getText).forEach(departureTimesText::add);
                 ArrayList<String> departureTimesUnique = (ArrayList<String>) departureTimesText.stream().distinct().collect(Collectors.toList());
                 ArrayList<Integer> uniqueIndeces = new ArrayList<>();
-                for (int i = 0; i < departureTimesUnique.size(); i++) {
-                    uniqueIndeces.add(departureTimesText.indexOf(departureTimesUnique.get(i)));
+                for (String s : departureTimesUnique) {
+                    uniqueIndeces.add(departureTimesText.indexOf(s));
                 }
                 //If the price belonging to the result defined by the time is not null, add them to be read
-                String ticketOption = null;
+                String ticketOption;
                 int faultyResultCounter = 0;
                 for (Integer uniqueIndex : uniqueIndeces) {
                     if ((!(prices.get(uniqueIndex) == null)) && (!(prices.get(uniqueIndex).getText() == null))) {
@@ -148,11 +138,11 @@ public class FlixbusTest extends ChooseInitializeDriver {
     }
 
     private ArrayList<ArrayList<WebElement>> transpose(ArrayList<ArrayList<WebElement>> matrixIn) {
-        ArrayList<ArrayList<WebElement>> transposedMatrix = new ArrayList<ArrayList<WebElement>>();
+        ArrayList<ArrayList<WebElement>> transposedMatrix = new ArrayList<>();
         if (!matrixIn.isEmpty()) {
             int noOfElementsInInnerList = matrixIn.get(0).size();
             for (int i = 0; i < noOfElementsInInnerList; i++) {
-                ArrayList<WebElement> col = new ArrayList<WebElement>();
+                ArrayList<WebElement> col = new ArrayList<>();
                 for (ArrayList<WebElement> row : matrixIn) {
                     col.add(row.get(i));
                 }

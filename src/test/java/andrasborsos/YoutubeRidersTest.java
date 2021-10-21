@@ -2,12 +2,12 @@ package andrasborsos;
 
 import andrasborsos.PageObjects.YoutubeHomePage;
 import andrasborsos.PageObjects.YoutubeSearchResultsPage;
-import andrasborsos.resources.ChooseInitializeDriver;
+import andrasborsos.resources.InitializeDriver;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-public class YoutubeRidersTest extends ChooseInitializeDriver {
+public class YoutubeRidersTest extends InitializeDriver {
 
     WebDriver driver;
     String videoTitle="";

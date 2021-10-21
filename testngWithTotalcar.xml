@@ -3,7 +3,7 @@
 <suite name="All Test Suite">
     <test name="Initialize">
         <classes>
-            <class name="andrasborsos.Initialize">
+            <class name="andrasborsos.InitializeTestSuite">
                 <methods>
                     <include name="initialize"/>
                 </methods>
