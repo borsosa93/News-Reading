@@ -30,7 +30,8 @@ public class PortfolioPage extends InitializeDriver {
     By coverPageBottomArticlesLocator=new By.ByCssSelector("div > article:nth-child(1) > h3 > a");
 
     public WebElement getAcceptCookiesBTN(){
-        WebDriverWait webDriverWait=new WebDriverWait(driver,15);
+        WebDriverWait webDriverWait=new WebDriverWait(driver,10);
+        webDriverWait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(1));
         webDriverWait.until(ExpectedConditions.elementToBeClickable(acceptCookiesBTNLocator));
         return driver.findElement(acceptCookiesBTNLocator);
     }

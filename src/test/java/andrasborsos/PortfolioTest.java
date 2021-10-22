@@ -33,7 +33,7 @@ public class PortfolioTest extends InitializeDriver {
     @Test
     public void exchangeRates() throws IOException {
         PortfolioPage portfolioPage=new PortfolioPage(driver);
-        driver.switchTo().frame(1);
+        //This one changes to a frame, so in the next line the driver is returned to defaultContent()
         portfolioPage.getAcceptCookiesBTN().click();
         driver.switchTo().defaultContent();
         portfolioPage.getdismissNotificationsBTN().click();
