@@ -34,5 +34,7 @@ public class ReadResultsTest extends InitializeDriver {
 
         }
         googleTranslatePage.getReadBTN().click();
+        googleTranslatePage.waitTillFinishedRead();
+        driver.close();
     }
 }
