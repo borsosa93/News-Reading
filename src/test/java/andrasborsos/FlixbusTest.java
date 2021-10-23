@@ -3,11 +3,9 @@ package andrasborsos;
 import andrasborsos.PageObjects.FlixbusHomePage;
 import andrasborsos.PageObjects.FlixbusSearchResultsPage;
 import andrasborsos.resources.InitializeDriver;
-
 import andrasborsos.resources.Utilities;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+
+import org.openqa.selenium.*;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
@@ -18,7 +16,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-import static andrasborsos.resources.Utilities.getProperty;
+import static andrasborsos.resources.Utilities.*;
 
 public class FlixbusTest extends InitializeDriver {
 
@@ -32,6 +30,7 @@ public class FlixbusTest extends InitializeDriver {
     public void initialize() throws IOException {
         this.driver = initializeDriver();
         driver.get(getProperty("flixbusURL"));
+        addToBeRead("Jegyek a Flixbus "+getProperty("departure")+" - "+getProperty("arrival")+ " járatára "+ Utilities.getTodaysDate().plusMonths(Integer.parseInt(getProperty("monthOffset")))+" napon "+getProperty("adults")+ " felnőtt és "+getProperty("children")+" gyerek részére "+getProperty("bikes")+" kerékpárral:");;
     }
 
     @Test
@@ -70,7 +69,6 @@ public class FlixbusTest extends InitializeDriver {
         flixbusHomePage.getsearchBTN().click();
 
         FlixbusSearchResultsPage flixbusSearchResultsPage = new FlixbusSearchResultsPage(driver);
-        ticketsPrices.add("Jegyek a Flixbus "+getProperty("departure")+" - "+getProperty("arrival")+ " járatára "+ Utilities.getTodaysDate().plusMonths(Integer.parseInt(getProperty("monthOffset")))+" napon "+getProperty("adults")+ " felnőtt és "+getProperty("children")+" gyerek részére "+getProperty("bikes")+" kerékpárral:");
         noTicketsMessage(flixbusSearchResultsPage.getNoTicketsMessage());
         parseSearchResults(flixbusSearchResultsPage.getResults());
 
@@ -92,7 +90,7 @@ public class FlixbusTest extends InitializeDriver {
         LocalDate departureDate= Utilities.getTodaysDate().plusMonths(Integer.parseInt(getProperty("monthOffset")));
         return Integer.parseInt(departureDate.toString().split("-")[2]);
     }
-    private void noTicketsMessage(WebElement message){
+    private void noTicketsMessage(WebElement message) {
         if(!(message==null)){
             ticketsPrices.add(("Hibaüzenet az oldalon: "+message.getText()));
             Assert.fail();
@@ -133,7 +131,7 @@ public class FlixbusTest extends InitializeDriver {
             }
         }
         else{
-            ticketsPrices.add("Hiba történt. Az oldalról képernyőfotót készítettem a projekt gyökérmappájába.");
+            //ticketsPrices.add("Hiba történt. Az oldalról képernyőfotót készítettem a projekt gyökérmappájába.");
             Assert.fail();
         }
     }

@@ -5,16 +5,16 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import static andrasborsos.resources.Utilities.getProperty;
 
 public class InitializeDriver {
 
-    // to be changed
+
     //String browserName=System.getProperty("browser");
     String browserName=getProperty("browserName");
-    //String browserName="chrome";
-    private String projectRoot=System.getProperty("user.dir");
+    private final String projectRoot=System.getProperty("user.dir");
 
     public InitializeDriver() throws IOException {
     }
