@@ -24,7 +24,6 @@ public class FlixbusHomePage extends InitializeDriver {
     private int arrivalDayIndex=-1;
 
     By shadowHostLocator =new By.ByCssSelector("div[id='usercentrics-root']");
-    By shadowHostFirstChildLocator =new By.ByCssSelector("div[data-testid='uc-app-container']");
     By acceptCookiesBTNLocator=new By.ByCssSelector("button[data-testid='uc-accept-all-button']");
 
     By roundtripRBTNLocator= new By.ByCssSelector("label[for='search-mask-trip-mode-roundtrip-toggle']");
@@ -48,14 +47,14 @@ public class FlixbusHomePage extends InitializeDriver {
 
     By searchBTNLocator=new By.ByCssSelector("button.smhc-btn--primary");
 
-    public WebElement getAcceptCookiesBTN() {
+    public WebElement getAcceptCookiesBTN(){
         WebDriverWait webDriverWait=new WebDriverWait(driver,10);
         webDriverWait.until(ExpectedConditions.numberOfElementsToBeMoreThan(shadowHostLocator,0));
         WebElement shadowHost= driver.findElement(shadowHostLocator);
         JavascriptExecutor jsExecutor=(JavascriptExecutor) driver;
-        WebElement shadowRoot=(WebElement) jsExecutor.executeScript("return arguments[0].shadowRoot",shadowHost);
-        webDriverWait.until(ExpectedConditions.visibilityOf((shadowRoot.findElement(shadowHostFirstChildLocator))));
-        return shadowRoot.findElement(acceptCookiesBTNLocator);
+        ArrayList<WebElement> shadowRootChildren=(ArrayList<WebElement>) jsExecutor.executeScript("return arguments[0].shadowRoot.children",shadowHost);
+        webDriverWait.until(ExpectedConditions.visibilityOf(shadowRootChildren.get(0)));
+        return shadowRootChildren.get(0).findElement(acceptCookiesBTNLocator);
    }
 
     public WebElement getRoundtripRBTN(){
