@@ -24,7 +24,6 @@ public class FlixbusHomePage extends InitializeDriver {
     private int arrivalDayIndex=-1;
 
     By shadowHostLocator =new By.ByCssSelector("div[id='usercentrics-root']");
-    By shadowHostFirstChildLocator =new By.ByCssSelector("div[data-testid='uc-app-container']");
     By acceptCookiesBTNLocator=new By.ByCssSelector("button[data-testid='uc-accept-all-button']");
 
     By roundtripRBTNLocator= new By.ByCssSelector("label[for='search-mask-trip-mode-roundtrip-toggle']");
