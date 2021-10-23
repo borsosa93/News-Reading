@@ -4,8 +4,8 @@ import andrasborsos.PageObjects.GoogleTranslatePage;
 import andrasborsos.resources.InitializeDriver;
 import andrasborsos.resources.Utilities;
 import org.openqa.selenium.WebDriver;
+import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class ReadResultsTest extends InitializeDriver {
         driver.get("https://translate.google.com/");
     }
 
-    @Test
+    @AfterSuite
     public void readResults() throws IOException {
         GoogleTranslatePage googleTranslatePage=new GoogleTranslatePage(driver);
         googleTranslatePage.getAcceptCookiesButton().click();
