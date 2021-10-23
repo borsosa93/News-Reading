@@ -30,4 +30,8 @@ public class GoogleTranslatePage extends InitializeDriver {
         return driver.findElement(readBTNLocator);
     }
     public WebElement getAcceptCookiesButton(){ return driver.findElement(acceptCookiesBTNLocator);}
+    public void waitTillFinishedRead(){
+        WebDriverWait webDriverWait=new WebDriverWait(driver,120);
+        webDriverWait.until(ExpectedConditions.attributeToBe(readBTNLocator,"aria-pressed","false"));
+    }
 }
