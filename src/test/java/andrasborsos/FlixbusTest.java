@@ -35,7 +35,7 @@ public class FlixbusTest extends InitializeDriver {
     }
 
     @Test
-    public void busTicketPrices() throws IOException {
+    public void busTicketPrices() throws IOException{
         FlixbusHomePage flixbusHomePage = new FlixbusHomePage(driver);
         flixbusHomePage.getAcceptCookiesBTN().click();
         flixbusHomePage.getRoundtripRBTN().click();
