@@ -20,6 +20,10 @@ public class PortfolioTest extends InitializeDriver {
     WebDriver driver;
     ArrayList<String> ratesEURUSD=new ArrayList<>();
     ArrayList<String> articlesTitles=new ArrayList<>();
+    String rate;
+    String EURHUF="0";
+    String USDHUF="0";
+
 
     public PortfolioTest() throws IOException {
     }
@@ -37,14 +41,16 @@ public class PortfolioTest extends InitializeDriver {
         portfolioPage.getAcceptCookiesBTN().click();
         driver.switchTo().defaultContent();
         portfolioPage.getdismissNotificationsBTN().click();
-        setProperty("EURHUF",portfolioPage.getEURHUF().getText());
-        String rate="Az euró árfolyama ";
-        rate+=portfolioPage.getEURHUF().getText()+" Ft.";
-        ratesEURUSD.add(rate);
-        setProperty("USDHUF",portfolioPage.getUSDHUF().getText());
-        rate="A dollár árfolyama ";
-        rate+=portfolioPage.getUSDHUF().getText()+" Ft.";
-        ratesEURUSD.add(rate);
+        EURHUF=portfolioPage.getEURHUF().getText();
+        if(!(EURHUF==null)){
+            ratesEURUSD.add("Az euró árfolyama "+EURHUF+" Ft.");
+            setProperty("EURHUF",EURHUF);
+        }
+        USDHUF=portfolioPage.getUSDHUF().getText();
+        if(!(USDHUF==null)){
+            ratesEURUSD.add("A dollár árfolyama "+USDHUF+" Ft.");
+            setProperty("USDHUF",USDHUF);
+        }
     }
 
     @Test(dependsOnMethods = {"exchangeRates"})
