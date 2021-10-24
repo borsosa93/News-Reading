@@ -30,11 +30,11 @@ public class FlixbusTest extends InitializeDriver {
     public void initialize() throws IOException {
         this.driver = initializeDriver();
         driver.get(getProperty("flixbusURL"));
-        addToBeRead("Jegyek a Flixbus "+getProperty("departure")+" - "+getProperty("arrival")+ " járatára "+ Utilities.getTodaysDate().plusMonths(Integer.parseInt(getProperty("monthOffset")))+" napon "+getProperty("adults")+ " felnőtt és "+getProperty("children")+" gyerek részére "+getProperty("bikes")+" kerékpárral:");;
+        addToBeRead("Jegyek a Flixbus "+getProperty("departure")+" - "+getProperty("arrival")+ " járatára "+ Utilities.getTodaysDate().plusMonths(Integer.parseInt(getProperty("monthOffset")))+" napon "+getProperty("adults")+ " felnőtt és "+getProperty("children")+" gyerek részére "+getProperty("bikes")+" kerékpárral:");
     }
 
     @Test
-    public void busTicketPrices() throws IOException{
+    public void busTicketPrices() throws IOException {
         FlixbusHomePage flixbusHomePage = new FlixbusHomePage(driver);
         flixbusHomePage.getAcceptCookiesBTN().click();
         flixbusHomePage.getRoundtripRBTN().click();

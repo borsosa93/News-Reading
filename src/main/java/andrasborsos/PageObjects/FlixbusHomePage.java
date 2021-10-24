@@ -47,13 +47,14 @@ public class FlixbusHomePage extends InitializeDriver {
 
     By searchBTNLocator=new By.ByCssSelector("button.smhc-btn--primary");
 
-    public WebElement getAcceptCookiesBTN(){
+    public WebElement getAcceptCookiesBTN() {
         WebDriverWait webDriverWait=new WebDriverWait(driver,10);
         webDriverWait.until(ExpectedConditions.numberOfElementsToBeMoreThan(shadowHostLocator,0));
         WebElement shadowHost= driver.findElement(shadowHostLocator);
         JavascriptExecutor jsExecutor=(JavascriptExecutor) driver;
         ArrayList<WebElement> shadowRootChildren=(ArrayList<WebElement>) jsExecutor.executeScript("return arguments[0].shadowRoot.children",shadowHost);
         webDriverWait.until(ExpectedConditions.visibilityOf(shadowRootChildren.get(0)));
+        webDriverWait.until(ExpectedConditions.visibilityOf(shadowRootChildren.get(0).findElement(acceptCookiesBTNLocator)));
         return shadowRootChildren.get(0).findElement(acceptCookiesBTNLocator);
    }
 
