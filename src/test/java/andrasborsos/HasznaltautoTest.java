@@ -61,7 +61,6 @@ public class HasznaltautoTest extends InitializeDriver {
             priceToParse = webElement.getText().replace(" ", "");
             if (priceToParse.contains("€")) {
                 priceAVG += (Integer.parseInt(priceToParse.split("€")[1])) * (Double.parseDouble(getProperty("EURHUF").replace(",",".")));
-
             } else {
                 priceAVG += Integer.parseInt(priceToParse.split("Ft")[0]);
             }
