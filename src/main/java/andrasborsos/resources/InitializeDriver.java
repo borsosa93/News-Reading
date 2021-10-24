@@ -13,8 +13,7 @@ import static andrasborsos.resources.Utilities.getProperty;
 public class InitializeDriver {
 
 
-    //String browserName=System.getProperty("browser");
-    String browserName=getProperty("browserName");
+    String browserName=System.getProperty("browser");
     private final String projectRoot=System.getProperty("user.dir");
 
     public InitializeDriver() throws IOException {
